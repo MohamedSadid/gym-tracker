@@ -16,9 +16,9 @@ Bottom bar: **Workouts** | **History** | **Progress**. Settings is a gear on Wor
 ## Screens
 
 1. **Workouts** — templates, **Start**, FAB new workout; empty: create first workout.
-2. **Edit workout** — name, ordered list, up/down reorder, add exercise, delete with confirm. Auto-save.
-3. **Exercise picker** — search, muscle-group chips, tap to add, create custom.
-4. **Active session** — elapsed time, Finish; sets (warmup, kg, reps, complete); Add set; rest bar.
+2. **Edit workout** — name, ordered list, up/down reorder, add exercise, delete with confirm. Auto-save. Tap the name to clear it and type a new one; leaving it empty keeps the last saved name.
+3. **Exercise picker** — search, muscle-group chips (light text on dark chips), tap to add, create custom.
+4. **Active session** — elapsed time, Finish; sets (tappable **warm-up** label in dim/solid orange, kg, reps, complete, remove set); Add set; rest bar.
 5. **Rest** — large countdown, pause / +15s / skip; at 0: haptic + sound.
 6. **History** — finished sessions; tap for read-only detail.
 7. **Progress** — exercise list; last top set + recent list/chart.

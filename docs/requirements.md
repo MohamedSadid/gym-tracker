@@ -19,14 +19,14 @@ v1 is done when you can use it for a real session without an account or internet
 - Built-in exercises are not deleted in v1.
 
 ### Workout templates
-- Create a named workout (e.g. Push A).
+- Create a named workout (e.g. Push A). Default name is **New workout**.
 - Add exercises in order; rename; add/remove/reorder; delete template.
+- Rename: tap the name field to clear it, then type the new name. Leave it empty and the previous name stays (default **New workout** if it was never renamed).
 - Deleting a template does **not** delete finished history.
 
 ### Active session
-- Start from a template.
-- Log sets: set number, **reps**, **weight (kg)**, optional **warmup**.
-- Add or remove a set; skip an exercise (no sets).
+- Start from a template. A new exercise starts with **one** set; add or remove sets as needed; skip an exercise (no sets).
+- Log sets: set number, **reps**, **weight (kg)**, optional **warmup** (tap **warm-up** next to the set; no checkbox).
 - **Finish** → saved with date/time and duration.
 - **Cancel** → confirm; **not saved**.
 

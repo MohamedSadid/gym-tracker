@@ -171,7 +171,7 @@ class SessionRepository(private val db: AppDatabase) {
             } else {
                 emptyList()
             }
-            val templates = if (lastSets.isNotEmpty()) lastSets else List(3) {
+            val templates = if (lastSets.isNotEmpty()) lastSets else List(1) {
                 SessionSetEntity(
                     sessionExerciseId = 0,
                     setIndex = it,

@@ -10,6 +10,10 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Fixed
 
+- [x] Edit workout name fought backspaces / last letter. Local draft; tap clears; empty on leave keeps last saved name.
+- [x] New exercise started with 3 sets. Now 1; add/remove in the session UI.
+- [x] Warmup was “W” + checkbox. Tappable **warm-up** label (dim → solid orange).
+- [x] Exercise picker group chips (Push/Pull) had black labels on dark chips. Forced light/contrast chip colors.
 - [x] Muscle group (e.g. Legs) drawn on top of the exercise name — cards used a `Box`, so texts stacked. Fixed by using a `Column` in `GymCard`.
 - [x] **Add set** did nothing — taps hit the overlapping complete-set control. Same card layout fix.
 - [x] **Add set** cramped between the check control and the exercise name — same overlap. Button is now full-width under the sets.

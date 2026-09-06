@@ -57,6 +57,7 @@ class V1WorkoutFlowTest {
 
         val sessionId = sessions.startFromWorkout(workoutId)
         val active = sessions.loadActive(sessionId)!!
+        assertEquals(1, active.exercises.first().sets.size)
         val firstSet = active.exercises.first().sets.first()
         sessions.saveSet(
             ActiveSet(
@@ -80,6 +81,30 @@ class V1WorkoutFlowTest {
         assertEquals(80.0, progress.lastTopSet!!.weightKg, 0.0)
         assertEquals(5, progress.lastTopSet!!.reps)
         assertEquals(1, progress.points.size)
+    }
+
+    @Test
+    fun renameBlankKeepsCurrentName() = runBlocking {
+        val workoutId = workouts.create()
+        workouts.rename(workoutId, "")
+        assertEquals("New workout", workouts.observeDetail(workoutId).first()?.name)
+        workouts.rename(workoutId, "Push A")
+        workouts.rename(workoutId, "   ")
+        assertEquals("Push A", workouts.observeDetail(workoutId).first()?.name)
+    }
+
+    @Test
+    fun sessionCanAddAndRemoveSets() = runBlocking {
+        val workoutId = workouts.create("Push A")
+        val bench = exercises.observeAll().first().first { it.name == "Barbell bench press" }
+        workouts.addExercise(workoutId, bench.id)
+        val sessionId = sessions.startFromWorkout(workoutId)
+        val exerciseId = sessions.loadActive(sessionId)!!.exercises.first().id
+        sessions.addSet(exerciseId)
+        val withTwo = sessions.loadActive(sessionId)!!.exercises.first().sets
+        assertEquals(2, withTwo.size)
+        sessions.removeSet(withTwo.last().id, exerciseId)
+        assertEquals(1, sessions.loadActive(sessionId)!!.exercises.first().sets.size)
     }
 
     @Test

@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +45,9 @@ import com.bool.gymtracker.domain.MuscleGroup
 import com.bool.gymtracker.ui.components.GymCard
 import com.bool.gymtracker.ui.components.PrimaryButton
 import com.bool.gymtracker.ui.theme.GymBlack
+import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
+import com.bool.gymtracker.ui.theme.GymSurfaceHigh
 import com.bool.gymtracker.ui.theme.GymText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -147,7 +150,8 @@ fun ExercisePickerScreen(workoutId: Long, onBack: () -> Unit) {
                     FilterChip(
                         selected = selectedGroup == group,
                         onClick = { viewModel.setGroup(group) },
-                        label = { Text(group.label) },
+                        label = { Text(group.label, color = if (selectedGroup == group) GymBlack else GymText) },
+                        colors = groupChipColors(),
                     )
                 }
             }
@@ -168,6 +172,14 @@ fun ExercisePickerScreen(workoutId: Long, onBack: () -> Unit) {
         )
     }
 }
+
+@Composable
+private fun groupChipColors() = FilterChipDefaults.filterChipColors(
+    containerColor = GymSurfaceHigh,
+    labelColor = GymText,
+    selectedContainerColor = GymLime,
+    selectedLabelColor = GymBlack,
+)
 
 @Composable
 private fun ExerciseRow(exercise: Exercise, onClick: () -> Unit) {
@@ -193,7 +205,12 @@ private fun CustomExerciseDialog(
                 OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") }, singleLine = true)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(MuscleGroup.entries) { item ->
-                        FilterChip(selected = group == item, onClick = { group = item }, label = { Text(item.label) })
+                        FilterChip(
+                            selected = group == item,
+                            onClick = { group = item },
+                            label = { Text(item.label, color = if (group == item) GymBlack else GymText) },
+                            colors = groupChipColors(),
+                        )
                     }
                 }
                 if (error != null) Text(error, color = MaterialTheme.colorScheme.error)

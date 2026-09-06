@@ -1,6 +1,7 @@
 package com.bool.gymtracker.ui.session
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
@@ -172,6 +171,13 @@ class SessionViewModel(
     fun addSet(exerciseId: Long) {
         viewModelScope.launch {
             sessions.addSet(exerciseId)
+            reload()
+        }
+    }
+
+    fun removeSet(setId: Long, exerciseId: Long) {
+        viewModelScope.launch {
+            sessions.removeSet(setId, exerciseId)
             reload()
         }
     }
@@ -408,7 +414,7 @@ private fun ExerciseCard(exercise: ExerciseDraft, viewModel: SessionViewModel) {
             Text("Last top set ${exercise.lastLabel}", color = GymMuted, modifier = Modifier.padding(bottom = 8.dp))
         }
         exercise.sets.forEach { set ->
-            SetRow(set, viewModel)
+            SetRow(set, exercise.id, viewModel)
         }
         TextButton(
             onClick = { viewModel.addSet(exercise.id) },
@@ -421,12 +427,18 @@ private fun ExerciseCard(exercise: ExerciseDraft, viewModel: SessionViewModel) {
 }
 
 @Composable
-private fun SetRow(set: SetDraft, viewModel: SessionViewModel) {
+private fun SetRow(set: SetDraft, exerciseId: Long, viewModel: SessionViewModel) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-        Text("${set.setIndex + 1}", modifier = Modifier.width(24.dp), color = GymMuted)
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("W", color = if (set.isWarmup) GymAmber else GymMuted, fontSize = 11.sp)
-            Checkbox(checked = set.isWarmup, onCheckedChange = { viewModel.onWarmup(set.id, it) }, enabled = !set.completed)
+        Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(end = 6.dp)) {
+            Text("${set.setIndex + 1}", color = GymMuted)
+            Text(
+                "warm-up",
+                color = if (set.isWarmup) GymAmber else GymAmber.copy(alpha = 0.45f),
+                fontSize = 12.sp,
+                modifier = Modifier.clickable(enabled = !set.completed) {
+                    viewModel.onWarmup(set.id, !set.isWarmup)
+                },
+            )
         }
         OutlinedTextField(
             value = set.weightText,
@@ -463,6 +475,9 @@ private fun SetRow(set: SetDraft, viewModel: SessionViewModel) {
             ),
         ) {
             Icon(Icons.Outlined.Check, contentDescription = "Complete set")
+        }
+        IconButton(onClick = { viewModel.removeSet(set.id, exerciseId) }) {
+            Icon(Icons.Outlined.Close, contentDescription = "Remove set", tint = GymMuted)
         }
     }
 }
