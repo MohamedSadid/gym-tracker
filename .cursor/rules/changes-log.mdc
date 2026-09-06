@@ -1,0 +1,16 @@
+---
+description: Keep docs/changes-log.md in sync when the user requests product or UI changes
+alwaysApply: true
+---
+
+# Changes log
+
+When the user asks for a product, UI, or behavior **change** (not a crash or “this doesn’t work”):
+
+1. Add it under **Open** in `docs/changes-log.md` as `- [ ]` with a short, concrete line (what, where, intended result).
+2. Do this in the same turn as investigating or implementing — do not wait to be asked.
+3. After the change is in the code, move that item to **Done**, mark `- [x]`, and add a brief note (file or how it works now).
+4. Do not duplicate an Open item that already describes the same change; update it instead.
+5. Bugs stay in `docs/bug-log.md`. If they say both, log each in the matching file.
+
+Format: `- [ ] Session: hide warm-up until the set menu marks it as warm-up.`

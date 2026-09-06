@@ -1,31 +1,39 @@
 package com.bool.gymtracker.ui.session
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,10 +42,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -428,44 +443,47 @@ private fun ExerciseCard(exercise: ExerciseDraft, viewModel: SessionViewModel) {
 
 @Composable
 private fun SetRow(set: SetDraft, exerciseId: Long, viewModel: SessionViewModel) {
+    var menuOpen by remember { mutableStateOf(false) }
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-        Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(end = 6.dp)) {
-            Text("${set.setIndex + 1}", color = GymMuted)
-            Text(
-                "warm-up",
-                color = if (set.isWarmup) GymAmber else GymAmber.copy(alpha = 0.45f),
-                fontSize = 12.sp,
-                modifier = Modifier.clickable(enabled = !set.completed) {
-                    viewModel.onWarmup(set.id, !set.isWarmup)
-                },
-            )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .wrapContentWidth(),
+        ) {
+            Text("${set.setIndex + 1}", color = GymMuted, fontSize = 13.sp)
+            if (set.isWarmup) {
+                Text(
+                    "warm-up",
+                    color = GymAmber,
+                    fontSize = 8.sp,
+                    lineHeight = 10.sp,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Visible,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
-        OutlinedTextField(
+        CompactSetField(
             value = set.weightText,
             onValueChange = { viewModel.onWeight(set.id, it) },
-            modifier = Modifier
-                .testTag("weightField")
-                .weight(1f)
-                .padding(horizontal = 4.dp),
+            label = "kg",
             enabled = !set.completed,
-            singleLine = true,
-            label = { Text("kg") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardType = KeyboardType.Decimal,
+            modifier = Modifier.testTag("weightField").weight(1f).padding(horizontal = 2.dp),
         )
-        OutlinedTextField(
+        CompactSetField(
             value = set.repsText,
             onValueChange = { viewModel.onReps(set.id, it) },
-            modifier = Modifier
-                .testTag("repsField")
-                .weight(1f)
-                .padding(horizontal = 4.dp),
+            label = "reps",
             enabled = !set.completed,
-            singleLine = true,
-            label = { Text("reps") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardType = KeyboardType.Number,
+            modifier = Modifier.testTag("repsField").weight(1f).padding(horizontal = 2.dp),
         )
         FilledIconButton(
             onClick = { viewModel.completeSet(set.id) },
+            modifier = Modifier.size(40.dp),
             enabled = !set.completed,
             colors = IconButtonDefaults.filledIconButtonColors(
                 containerColor = if (set.completed) GymLime else GymSurfaceHigh,
@@ -476,8 +494,83 @@ private fun SetRow(set: SetDraft, exerciseId: Long, viewModel: SessionViewModel)
         ) {
             Icon(Icons.Outlined.Check, contentDescription = "Complete set")
         }
-        IconButton(onClick = { viewModel.removeSet(set.id, exerciseId) }) {
+        Box {
+            IconButton(onClick = { menuOpen = true }, modifier = Modifier.size(36.dp)) {
+                Icon(Icons.Outlined.MoreVert, contentDescription = "Set options", tint = GymMuted)
+            }
+            DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            if (set.isWarmup) "Remove warm-up" else "Set as warm-up",
+                            color = GymAmber,
+                        )
+                    },
+                    onClick = {
+                        viewModel.onWarmup(set.id, !set.isWarmup)
+                        menuOpen = false
+                    },
+                )
+            }
+        }
+        IconButton(onClick = { viewModel.removeSet(set.id, exerciseId) }, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Outlined.Close, contentDescription = "Remove set", tint = GymMuted)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CompactSetField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    enabled: Boolean,
+    keyboardType: KeyboardType,
+    modifier: Modifier = Modifier,
+) {
+    val interaction = remember { MutableInteractionSource() }
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .defaultMinSize(minWidth = 0.dp, minHeight = 46.dp)
+            .height(46.dp),
+        enabled = enabled,
+        singleLine = true,
+        textStyle = TextStyle(fontSize = 17.sp, color = GymText),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        interactionSource = interaction,
+        decorationBox = { inner ->
+            OutlinedTextFieldDefaults.DecorationBox(
+                value = value,
+                innerTextField = inner,
+                enabled = enabled,
+                singleLine = true,
+                visualTransformation = VisualTransformation.None,
+                interactionSource = interaction,
+                label = { FieldLabel(label) },
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                colors = OutlinedTextFieldDefaults.colors(),
+                container = {
+                    OutlinedTextFieldDefaults.Container(
+                        enabled = enabled,
+                        isError = false,
+                        interactionSource = interaction,
+                    )
+                },
+            )
+        },
+    )
+}
+
+@Composable
+private fun FieldLabel(text: String) {
+    Text(
+        text,
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Clip,
+        fontSize = 11.sp,
+    )
 }

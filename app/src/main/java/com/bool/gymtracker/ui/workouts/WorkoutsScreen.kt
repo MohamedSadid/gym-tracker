@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +28,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,6 +43,7 @@ import com.bool.gymtracker.domain.WorkoutSummary
 import com.bool.gymtracker.ui.components.EmptyState
 import com.bool.gymtracker.ui.components.GymCard
 import com.bool.gymtracker.ui.theme.GymBlack
+import com.bool.gymtracker.ui.theme.GymDanger
 import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
 import com.bool.gymtracker.ui.theme.GymText
@@ -61,6 +66,10 @@ class WorkoutsViewModel(
     fun start(workoutId: Long, onStarted: (Long) -> Unit) {
         viewModelScope.launch { onStarted(startSession(workoutId)) }
     }
+
+    fun delete(workoutId: Long) {
+        viewModelScope.launch { workouts.delete(workoutId) }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +81,7 @@ fun WorkoutsScreen(
     viewModel: WorkoutsViewModel = appViewModel { WorkoutsViewModel(it.workouts, it.sessions::startFromWorkout) },
 ) {
     val workouts by viewModel.items.collectAsStateWithLifecycle()
+    var pendingDeleteId by remember { mutableStateOf<Long?>(null) }
     Scaffold(
         containerColor = GymBlack,
         topBar = {
@@ -105,25 +115,63 @@ fun WorkoutsScreen(
             ) {
                 item { Spacer(Modifier.height(4.dp)) }
                 items(workouts, key = { it.id }) { workout ->
-                    GymCard(Modifier.fillMaxWidth()) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f)) {
-                                Text(workout.name, style = MaterialTheme.typography.titleLarge)
-                                Text(
-                                    "${workout.exerciseCount} exercise${if (workout.exerciseCount == 1) "" else "s"}",
-                                    color = GymMuted,
-                                )
-                                TextButton(onClick = { onOpenWorkout(workout.id) }) { Text("Edit", color = GymLime) }
-                            }
-                            Button(
-                                onClick = { viewModel.start(workout.id, onStartSession) },
-                                colors = ButtonDefaults.buttonColors(containerColor = GymLime, contentColor = GymBlack),
-                            ) { Text("Start") }
-                        }
-                    }
+                    WorkoutCard(
+                        workout = workout,
+                        onEdit = { onOpenWorkout(workout.id) },
+                        onStart = { viewModel.start(workout.id, onStartSession) },
+                        onDelete = { pendingDeleteId = workout.id },
+                    )
                 }
                 item { Spacer(Modifier.height(72.dp)) }
             }
+        }
+    }
+
+    val deleteTarget = pendingDeleteId
+    if (deleteTarget != null) {
+        AlertDialog(
+            onDismissRequest = { pendingDeleteId = null },
+            title = { Text("Delete workout?") },
+            text = { Text("Past sessions stay in history.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.delete(deleteTarget)
+                        pendingDeleteId = null
+                    },
+                ) { Text("Delete", color = GymDanger) }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingDeleteId = null }) { Text("Cancel") }
+            },
+        )
+    }
+}
+
+@Composable
+private fun WorkoutCard(
+    workout: WorkoutSummary,
+    onEdit: () -> Unit,
+    onStart: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    GymCard(Modifier.fillMaxWidth()) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(workout.name, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    "${workout.exerciseCount} exercise${if (workout.exerciseCount == 1) "" else "s"}",
+                    color = GymMuted,
+                )
+                Row {
+                    TextButton(onClick = onEdit) { Text("Edit", color = GymLime) }
+                    TextButton(onClick = onDelete) { Text("Delete", color = GymDanger) }
+                }
+            }
+            Button(
+                onClick = onStart,
+                colors = ButtonDefaults.buttonColors(containerColor = GymLime, contentColor = GymBlack),
+            ) { Text("Start") }
         }
     }
 }

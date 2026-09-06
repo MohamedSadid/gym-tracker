@@ -29,7 +29,7 @@ Single user: no `User` table. Add `userId` later if needed.
 - `WorkoutExercise` — workout, exercise, position
 - `Session` — snapshot of workout name, started/finished
 - `SessionExercise` — snapshot of exercise name, position
-- `SessionSet` — reps, weightKg, warmup, completed. First session of an exercise seeds **one** working set; later sessions copy last completed working sets.
+- `SessionSet` — reps, weightKg, warmup, completed. Every new session seeds **one** working set per exercise; weight/reps pre-fill from the last completed working set when history exists.
 - `Settings` — default rest seconds
 
 Finished sessions keep **name snapshots** so renaming a template does not rewrite history. Deleting a template does not delete sessions.
@@ -64,6 +64,6 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
-- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set
+- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
-- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device)
+- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from the Workouts list

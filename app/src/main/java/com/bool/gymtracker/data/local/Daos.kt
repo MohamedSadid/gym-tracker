@@ -88,6 +88,9 @@ interface WorkoutExerciseDao {
     @Query("DELETE FROM workout_exercises WHERE id = :id")
     suspend fun delete(id: Long)
 
+    @Query("DELETE FROM workout_exercises WHERE workoutId = :workoutId")
+    suspend fun deleteForWorkout(workoutId: Long)
+
     @Query("UPDATE workout_exercises SET position = :position WHERE id = :id")
     suspend fun updatePosition(id: Long, position: Int)
 }

@@ -59,7 +59,15 @@ class V1UiFlowTest {
             compose.onAllNodesWithText("Barbell bench press").fetchSemanticsNodes().isNotEmpty()
         }
         compose.onNodeWithText("Barbell bench press").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Edit workout").fetchSemanticsNodes().isNotEmpty() &&
+                compose.onAllNodesWithText("Barbell bench press").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Save").performClick()
         compose.onNodeWithContentDescription("Back").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
+        }
         compose.onNodeWithText("Start").performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithContentDescription("Complete set").fetchSemanticsNodes().isNotEmpty()
@@ -90,6 +98,39 @@ class V1UiFlowTest {
         }
         compose.onNodeWithTag("lastTopSetValue").assertIsDisplayed()
         compose.onNodeWithTag("lastTopSetValue").assertTextEquals("0 kg × 0")
+        db.close()
+    }
+
+    @Test
+    fun deleteWorkoutFromList() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        runBlocking {
+            db.exerciseDao().insertAll(ExerciseSeed.builtIn())
+            db.settingsDao().upsert(SettingsEntity(defaultRestSeconds = 90))
+        }
+        val container = AppContainer(context, db)
+
+        compose.setContent {
+            CompositionLocalProvider(LocalAppContainer provides container) {
+                GymTrackerTheme { GymTrackerRoot() }
+            }
+        }
+
+        compose.onNodeWithText("Create workout").performClick()
+        compose.onNodeWithText("Save").performClick()
+        compose.onNodeWithContentDescription("Back").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Delete").performClick()
+        compose.onNodeWithText("Delete workout?").assertIsDisplayed()
+        compose.onAllNodesWithText("Delete")[1].performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("No workouts yet").fetchSemanticsNodes().isNotEmpty()
+        }
         db.close()
     }
 }

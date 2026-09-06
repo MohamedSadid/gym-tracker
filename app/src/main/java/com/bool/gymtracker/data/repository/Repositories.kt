@@ -95,8 +95,9 @@ class WorkoutRepository(private val db: AppDatabase) {
 
     suspend fun delete(id: Long) = workouts.delete(id)
 
-    suspend fun addExercise(workoutId: Long, exerciseId: Long) {
+    suspend fun addExercise(workoutId: Long, exerciseId: Long): Boolean {
         val existing = items.forWorkout(workoutId)
+        if (existing.any { it.exerciseId == exerciseId }) return false
         items.insert(
             WorkoutExerciseEntity(
                 workoutId = workoutId,
@@ -104,6 +105,22 @@ class WorkoutRepository(private val db: AppDatabase) {
                 position = existing.size,
             ),
         )
+        return true
+    }
+
+    suspend fun replaceExercises(workoutId: Long, exerciseIds: List<Long>) {
+        db.withTransaction {
+            items.deleteForWorkout(workoutId)
+            exerciseIds.forEachIndexed { index, exerciseId ->
+                items.insert(
+                    WorkoutExerciseEntity(
+                        workoutId = workoutId,
+                        exerciseId = exerciseId,
+                        position = index,
+                    ),
+                )
+            }
+        }
     }
 
     suspend fun removeExercise(workoutExerciseId: Long, workoutId: Long) {
@@ -165,34 +182,23 @@ class SessionRepository(private val db: AppDatabase) {
                 ),
             )
             val lastSessionId = sets.lastFinishedSessionId(we.exerciseId)
-            val lastSets = if (lastSessionId != null) {
+            val lastWorking = if (lastSessionId != null) {
                 sets.setsForSessionExercise(lastSessionId, we.exerciseId)
                     .filter { it.completed && !it.isWarmup }
+                    .lastOrNull()
             } else {
-                emptyList()
+                null
             }
-            val templates = if (lastSets.isNotEmpty()) lastSets else List(1) {
+            sets.insert(
                 SessionSetEntity(
-                    sessionExerciseId = 0,
-                    setIndex = it,
-                    reps = 0,
-                    weightKg = 0.0,
+                    sessionExerciseId = seId,
+                    setIndex = 0,
+                    reps = lastWorking?.reps ?: 0,
+                    weightKg = lastWorking?.weightKg ?: 0.0,
                     isWarmup = false,
                     completed = false,
-                )
-            }
-            templates.forEachIndexed { index, template ->
-                sets.insert(
-                    SessionSetEntity(
-                        sessionExerciseId = seId,
-                        setIndex = index,
-                        reps = template.reps,
-                        weightKg = template.weightKg,
-                        isWarmup = false,
-                        completed = false,
-                    ),
-                )
-            }
+                ),
+            )
         }
         sessionId
     }

@@ -119,6 +119,53 @@ class V1WorkoutFlowTest {
     }
 
     @Test
+    fun addingSameExerciseTwiceIsRejected() = runBlocking {
+        val workoutId = workouts.create("Legs")
+        val squat = exercises.observeAll().first().first { it.name == "Back squat" }
+        assertTrue(workouts.addExercise(workoutId, squat.id))
+        assertEquals(false, workouts.addExercise(workoutId, squat.id))
+        assertEquals(1, workouts.observeDetail(workoutId).first()?.exercises?.size)
+    }
+
+    @Test
+    fun newSessionAlwaysStartsWithOneSet() = runBlocking {
+        val workoutId = workouts.create("Legs")
+        val squat = exercises.observeAll().first().first { it.name == "Back squat" }
+        workouts.addExercise(workoutId, squat.id)
+        val firstId = sessions.startFromWorkout(workoutId)
+        val exerciseId = sessions.loadActive(firstId)!!.exercises.first().id
+        sessions.addSet(exerciseId)
+        val two = sessions.loadActive(firstId)!!.exercises.first().sets
+        assertEquals(2, two.size)
+        two.forEachIndexed { index, set ->
+            sessions.saveSet(set.copy(reps = 5 + index, weightKg = 100.0, completed = true))
+        }
+        sessions.finish(firstId)
+
+        val secondId = sessions.startFromWorkout(workoutId)
+        val started = sessions.loadActive(secondId)!!.exercises.first().sets
+        assertEquals(1, started.size)
+        assertEquals(100.0, started.first().weightKg, 0.0)
+        assertEquals(6, started.first().reps)
+    }
+
+    @Test
+    fun deleteWorkoutKeepsHistory() = runBlocking {
+        val workoutId = workouts.create("Push A")
+        val bench = exercises.observeAll().first().first { it.name == "Barbell bench press" }
+        workouts.addExercise(workoutId, bench.id)
+        val sessionId = sessions.startFromWorkout(workoutId)
+        val set = sessions.loadActive(sessionId)!!.exercises.first().sets.first()
+        sessions.saveSet(set.copy(reps = 5, weightKg = 80.0, completed = true))
+        sessions.finish(sessionId)
+        workouts.delete(workoutId)
+        assertTrue(workouts.observeSummaries().first().isEmpty())
+        val history = sessions.observeHistory().first()
+        assertEquals(1, history.size)
+        assertEquals("Push A", history.first().workoutName)
+    }
+
+    @Test
     fun customExerciseRejectsDuplicateName() = runBlocking {
         val first = exercises.addCustom("Cable fly", MuscleGroup.PUSH)
         assertTrue(first.isSuccess)

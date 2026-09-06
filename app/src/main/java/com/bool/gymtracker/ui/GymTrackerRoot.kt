@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -124,10 +125,18 @@ fun GymTrackerRoot() {
                 arguments = listOf(navArgument("workoutId") { type = NavType.LongType }),
             ) { entry ->
                 val id = entry.arguments?.getLong("workoutId") ?: return@composable
+                val pendingExerciseId by entry.savedStateHandle
+                    .getStateFlow("pickedExerciseId", 0L)
+                    .collectAsStateWithLifecycle()
                 EditWorkoutScreen(
                     workoutId = id,
+                    pendingExerciseId = pendingExerciseId,
+                    onPendingConsumed = { entry.savedStateHandle["pickedExerciseId"] = 0L },
                     onBack = { nav.popBackStack() },
-                    onAddExercise = { nav.navigate(Routes.picker(id)) },
+                    onAddExercise = { ids ->
+                        entry.savedStateHandle["draftExerciseIds"] = ids.toLongArray()
+                        nav.navigate(Routes.picker(id))
+                    },
                 )
             }
             composable(
@@ -135,9 +144,19 @@ fun GymTrackerRoot() {
                 arguments = listOf(navArgument("workoutId") { type = NavType.LongType }),
             ) { entry ->
                 val id = entry.arguments?.getLong("workoutId") ?: return@composable
+                val alreadyAdded = nav.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<LongArray>("draftExerciseIds")
+                    ?.toList()
+                    .orEmpty()
                 ExercisePickerScreen(
                     workoutId = id,
+                    alreadyAddedIds = alreadyAdded,
                     onBack = { nav.popBackStack() },
+                    onPicked = { exerciseId ->
+                        nav.previousBackStackEntry?.savedStateHandle?.set("pickedExerciseId", exerciseId)
+                        nav.popBackStack()
+                    },
                 )
             }
             composable(
