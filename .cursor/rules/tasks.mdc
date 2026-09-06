@@ -1,0 +1,13 @@
+---
+description: Keep docs/tasks.md in sync when planning or finishing work
+alwaysApply: true
+---
+
+# Tasks file
+
+`docs/tasks.md` is the project checklist.
+
+- If the user finishes a Next item (e.g. ran the app on a phone), mark that line `- [x]`.
+- If they ask for next steps or a new workstream, add `- [ ]` items under **Next** (or **Later** if not v1).
+- Do not add v2 ideas (sync, accounts, kg/lb) to **Next** unless they ask to do them now.
+- Keep items short and actionable.

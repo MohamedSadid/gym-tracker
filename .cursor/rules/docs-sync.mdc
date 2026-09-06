@@ -1,0 +1,14 @@
+---
+description: Keep requirements, design, and architecture docs aligned with the product
+alwaysApply: true
+---
+
+# Docs stay in sync
+
+When behavior or structure of the app changes, update the matching docs in the same work:
+
+- `docs/requirements.md` — in/out of scope, user-visible rules, locked decisions
+- `docs/design.md` — screens, layout, visual, flows
+- `docs/architecture.md` — layers, data model, packages, stack
+
+Only edit the sections that the change actually affects. Do not invent new v1 features in the docs. If a change contradicts a locked decision, update that decision in requirements and call it out to the user.

@@ -1,0 +1,12 @@
+---
+description: Prefer simple implementations; no extra complexity
+alwaysApply: true
+---
+
+# Keep implementations simple
+
+- Prefer the smallest change that solves the problem.
+- Do not add new layers, libraries, or abstractions “for later” unless the user asked.
+- Avoid clever code, huge functions, and copy-paste across many files when one small edit works.
+- Match existing project patterns (`AppContainer`, Compose screens, Room repositories).
+- If two options exist, choose the one that is easier to read and debug.

@@ -1,0 +1,14 @@
+---
+description: Keep unit tests aligned with app behavior after every change
+alwaysApply: true
+---
+
+# Unit tests stay in sync
+
+When app behavior or code changes, update the matching tests in `app/src/test/` in the same work:
+
+- Change or add tests so they describe the **new** behavior, not the old one.
+- Prefer existing files (`V1WorkoutFlowTest`, `V1UiFlowTest`, `RestTimerStateTest`) unless a new area needs its own small test class.
+- If a test is obsolete, delete or rewrite it — do not leave failing or lying tests.
+- After test edits, run the relevant unit tests when a Gradle/JDK setup is available.
+- Keep tests simple: one clear scenario, no extra frameworks unless already in the project.

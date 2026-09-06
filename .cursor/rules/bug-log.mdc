@@ -1,0 +1,16 @@
+---
+description: Keep docs/bug-log.md in sync when the user reports or we fix bugs
+alwaysApply: true
+---
+
+# Bug log
+
+When the user describes a bug, crash, wrong UI, or “this doesn’t work”:
+
+1. Add it under **Open** in `docs/bug-log.md` as `- [ ]` with a short, concrete line (what, where, expected).
+2. Do this in the same turn as investigating or fixing — do not wait to be asked.
+3. After a fix is in the code, move that item to **Fixed**, mark `- [x]`, and add a brief note (file or cause).
+4. Do not duplicate an Open item that already describes the same issue; update it instead.
+5. Do not log build-folder noise or one-off Android Studio “no device” unless they want it tracked.
+
+Format: `- [ ] Session: Add set does nothing. Expected a new set row.`

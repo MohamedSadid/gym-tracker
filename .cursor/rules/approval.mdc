@@ -1,0 +1,11 @@
+---
+description: Explain and get approval before implementing; never push unless asked
+alwaysApply: true
+---
+
+# Approval before code and push
+
+- Do **not** implement (edit app/source, Gradle, or behavior) until you have given a **clear explanation** of what you will change and **why**, and the user has **approved** that plan (e.g. “do it”, “yes”, “implement”).
+- Logging a bug in `docs/bug-log.md` or ticking a task is allowed without that approval. Writing or changing **code** is not.
+- After approval, implement only what was agreed. If the approach must change, stop and explain again.
+- **Never** `git push` (or publish to a remote) unless the user explicitly says to push. Commit only when they ask to commit.
