@@ -1,6 +1,10 @@
 package com.bool.gymtracker.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.FitnessCenter
@@ -34,6 +38,7 @@ import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
 import com.bool.gymtracker.ui.workouts.EditWorkoutScreen
 import com.bool.gymtracker.ui.workouts.ExercisePickerScreen
+import com.bool.gymtracker.ui.workouts.ProgramDayScreen
 import com.bool.gymtracker.ui.workouts.ProgramDetailScreen
 import com.bool.gymtracker.ui.workouts.ProgramsScreen
 import com.bool.gymtracker.ui.workouts.WorkoutsHubScreen
@@ -43,18 +48,20 @@ object Routes {
     const val Workouts = "workouts"
     const val Programs = "programs"
     const val ProgramDetail = "program/{programKey}"
+    const val ProgramDay = "program-day/{workoutId}"
     const val Customize = "customize"
     const val History = "history"
     const val Progress = "progress"
     const val Settings = "settings"
-    const val EditWorkout = "workout/{workoutId}"
+    const val EditWorkout = "workout/{workoutId}?new={new}"
     const val Picker = "picker/{workoutId}"
     const val Session = "session/{sessionId}"
     const val SessionDetail = "history/{sessionId}"
     const val ExerciseProgress = "progress/{exerciseId}"
 
     fun program(key: String) = "program/$key"
-    fun edit(id: Long) = "workout/$id"
+    fun programDay(id: Long) = "program-day/$id"
+    fun edit(id: Long, isNew: Boolean = false) = "workout/$id?new=$isNew"
     fun picker(id: Long) = "picker/$id"
     fun session(id: Long) = "session/$id"
     fun historyDetail(id: Long) = "history/$id"
@@ -106,10 +113,19 @@ fun GymTrackerRoot() {
             }
         },
     ) { padding ->
+        val layoutDir = LocalLayoutDirection.current
         NavHost(
             navController = nav,
             startDestination = Routes.Workouts,
-            modifier = Modifier.padding(padding),
+            modifier = Modifier.padding(
+                start = padding.calculateLeftPadding(layoutDir),
+                top = padding.calculateTopPadding(),
+                end = padding.calculateRightPadding(layoutDir),
+            ),
+            enterTransition = { fadeIn(animationSpec = tween(90)) },
+            exitTransition = { fadeOut(animationSpec = tween(90)) },
+            popEnterTransition = { fadeIn(animationSpec = tween(90)) },
+            popExitTransition = { fadeOut(animationSpec = tween(90)) },
         ) {
             composable(Routes.Workouts) {
                 WorkoutsHubScreen(
@@ -132,6 +148,17 @@ fun GymTrackerRoot() {
                 ProgramDetailScreen(
                     programKey = key,
                     onBack = { nav.popBackStack() },
+                    onOpenDay = { nav.navigate(Routes.programDay(it)) },
+                )
+            }
+            composable(
+                Routes.ProgramDay,
+                arguments = listOf(navArgument("workoutId") { type = NavType.LongType }),
+            ) { entry ->
+                val id = entry.arguments?.getLong("workoutId") ?: return@composable
+                ProgramDayScreen(
+                    workoutId = id,
+                    onBack = { nav.popBackStack() },
                     onCopied = {
                         nav.navigate(Routes.Customize) {
                             popUpTo(Routes.Workouts)
@@ -142,8 +169,8 @@ fun GymTrackerRoot() {
             }
             composable(Routes.Customize) {
                 WorkoutsScreen(
-                    onOpenWorkout = { nav.navigate(Routes.edit(it)) },
-                    onStartSession = { nav.navigate(Routes.session(it)) },
+                    onOpenWorkout = { nav.navigate(Routes.programDay(it)) },
+                    onEditWorkout = { id, isNew -> nav.navigate(Routes.edit(id, isNew)) },
                     onBack = { nav.popBackStack() },
                 )
             }
@@ -158,14 +185,19 @@ fun GymTrackerRoot() {
             }
             composable(
                 Routes.EditWorkout,
-                arguments = listOf(navArgument("workoutId") { type = NavType.LongType }),
+                arguments = listOf(
+                    navArgument("workoutId") { type = NavType.LongType },
+                    navArgument("new") { type = NavType.BoolType; defaultValue = false },
+                ),
             ) { entry ->
                 val id = entry.arguments?.getLong("workoutId") ?: return@composable
+                val isNew = entry.arguments?.getBoolean("new") ?: false
                 val pendingExerciseId by entry.savedStateHandle
                     .getStateFlow("pickedExerciseId", 0L)
                     .collectAsStateWithLifecycle()
                 EditWorkoutScreen(
                     workoutId = id,
+                    isNew = isNew,
                     pendingExerciseId = pendingExerciseId,
                     onPendingConsumed = { entry.savedStateHandle["pickedExerciseId"] = 0L },
                     onBack = { nav.popBackStack() },

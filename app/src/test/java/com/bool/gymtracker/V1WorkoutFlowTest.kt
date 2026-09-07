@@ -183,10 +183,10 @@ class V1WorkoutFlowTest {
         assertEquals(3, workouts.observeProgramDays("full_body").first().size)
         assertTrue(workouts.observeSummaries().first().isEmpty())
 
-        workouts.copyProgram("full_body")
+        workouts.copyWorkout(first.id)
         val custom = workouts.observeSummaries().first()
-        assertEquals(3, custom.size)
-        assertTrue(custom.all { it.name.endsWith("(copy)") })
+        assertEquals(1, custom.size)
+        assertTrue(custom.first().name.endsWith("(copy)"))
         assertEquals(3, workouts.observeProgramDays("full_body").first().size)
     }
 

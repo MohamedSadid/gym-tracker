@@ -30,3 +30,4 @@ Mark a box `[x]` when that item is done.
 - [x] Debug APK build
 - [x] Automated tests (data flow, rest timer, UI smoke)
 - [x] Workouts hub, built-in programs, copy into Customize
+- [x] Leave-without-save for new custom workouts; Start/Copy inside opened day

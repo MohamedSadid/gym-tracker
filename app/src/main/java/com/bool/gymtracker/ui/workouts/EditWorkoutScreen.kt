@@ -1,5 +1,6 @@
 package com.bool.gymtracker.ui.workouts
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,6 +54,7 @@ import com.bool.gymtracker.ui.theme.GymBlack
 import com.bool.gymtracker.ui.theme.GymDanger
 import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
+import com.bool.gymtracker.ui.theme.GymSurfaceHigh
 import com.bool.gymtracker.ui.theme.GymText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -66,16 +68,18 @@ data class EditWorkoutUiState(
     val name: String = "",
     val exercises: List<WorkoutExerciseItem> = emptyList(),
     val dirty: Boolean = false,
+    val neverSaved: Boolean = false,
     val confirmLeave: Boolean = false,
     val confirmDelete: Boolean = false,
 )
 
 class EditWorkoutViewModel(
     private val workoutId: Long,
+    isNew: Boolean,
     private val workouts: WorkoutRepository,
     private val exercises: ExerciseRepository,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(EditWorkoutUiState())
+    private val _state = MutableStateFlow(EditWorkoutUiState(neverSaved = isNew))
     val state = _state.asStateFlow()
 
     private var savedName = ""
@@ -151,7 +155,7 @@ class EditWorkoutViewModel(
     fun leave(onBack: () -> Unit) {
         viewModelScope.launch {
             persistLock.withLock { }
-            if (_state.value.dirty) askLeave(true) else onBack()
+            if (_state.value.neverSaved || _state.value.dirty) askLeave(true) else onBack()
         }
     }
 
@@ -160,7 +164,7 @@ class EditWorkoutViewModel(
         val name = current.name.trim().ifBlank { savedName }
         workouts.rename(workoutId, name)
         workouts.replaceExercises(workoutId, current.exercises.map { it.exerciseId })
-        _state.update { it.copy(name = name, dirty = false, confirmLeave = false) }
+        _state.update { it.copy(name = name, dirty = false, neverSaved = false, confirmLeave = false) }
     }
 
     fun discard(onDiscarded: (() -> Unit)? = null) {
@@ -168,6 +172,17 @@ class EditWorkoutViewModel(
             it.copy(name = savedName, exercises = savedExercises, dirty = false, confirmLeave = false)
         }
         onDiscarded?.invoke()
+    }
+
+    fun leaveWithoutSaving(onBack: () -> Unit) {
+        if (_state.value.neverSaved) {
+            viewModelScope.launch {
+                workouts.delete(workoutId)
+                onBack()
+            }
+        } else {
+            discard(onBack)
+        }
     }
 
     fun askLeave(show: Boolean) = _state.update { it.copy(confirmLeave = show) }
@@ -185,6 +200,7 @@ class EditWorkoutViewModel(
 @Composable
 fun EditWorkoutScreen(
     workoutId: Long,
+    isNew: Boolean,
     pendingExerciseId: Long,
     onPendingConsumed: () -> Unit,
     onBack: () -> Unit,
@@ -192,11 +208,16 @@ fun EditWorkoutScreen(
 ) {
     val container = LocalAppContainer.current
     val viewModel: EditWorkoutViewModel = viewModel(
-        key = "edit-$workoutId",
+        key = "edit-$workoutId-$isNew",
         factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                EditWorkoutViewModel(workoutId, container.workouts, container.exercises) as T
+                EditWorkoutViewModel(
+                    workoutId,
+                    isNew,
+                    container.workouts,
+                    container.exercises,
+                ) as T
         },
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -224,6 +245,14 @@ fun EditWorkoutScreen(
         viewModel.leave(onBack)
     }
 
+    BackHandler {
+        when {
+            state.confirmLeave -> viewModel.askLeave(false)
+            state.confirmDelete -> viewModel.askDelete(false)
+            else -> leave()
+        }
+    }
+
     Scaffold(
         containerColor = GymBlack,
         topBar = {
@@ -249,9 +278,9 @@ fun EditWorkoutScreen(
                             commitName()
                             viewModel.save()
                         },
-                        enabled = state.dirty,
+                        enabled = state.dirty || state.neverSaved,
                     ) {
-                        Text("Save", color = if (state.dirty) GymLime else GymMuted.copy(alpha = 0.4f))
+                        Text("Save", color = if (state.dirty || state.neverSaved) GymLime else GymMuted.copy(alpha = 0.4f))
                     }
                     IconButton(onClick = { viewModel.askDelete(true) }) {
                         Icon(Icons.Outlined.Delete, contentDescription = "Delete", tint = GymDanger)
@@ -315,8 +344,19 @@ fun EditWorkoutScreen(
     if (state.confirmLeave) {
         AlertDialog(
             onDismissRequest = { viewModel.askLeave(false) },
-            title = { Text("Save changes?") },
-            text = { Text("Cancel discards edits and keeps the last saved workout.") },
+            containerColor = GymSurfaceHigh,
+            titleContentColor = GymText,
+            textContentColor = GymText,
+            title = { Text(if (state.neverSaved) "Save workout?" else "Save changes?") },
+            text = {
+                Text(
+                    if (state.neverSaved) {
+                        "Don't save removes this workout from Customize."
+                    } else {
+                        "Don't save discards edits and keeps the last saved workout."
+                    },
+                )
+            },
             confirmButton = {
                 TextButton(onClick = {
                     commitName()
@@ -324,7 +364,9 @@ fun EditWorkoutScreen(
                 }) { Text("Save", color = GymLime) }
             },
             dismissButton = {
-                TextButton(onClick = { viewModel.discard(onBack) }) { Text("Cancel") }
+                TextButton(onClick = { viewModel.leaveWithoutSaving(onBack) }) {
+                    Text("Don't save", color = GymText)
+                }
             },
         )
     }
@@ -332,13 +374,16 @@ fun EditWorkoutScreen(
     if (state.confirmDelete) {
         AlertDialog(
             onDismissRequest = { viewModel.askDelete(false) },
+            containerColor = GymSurfaceHigh,
+            titleContentColor = GymText,
+            textContentColor = GymText,
             title = { Text("Delete workout?") },
             text = { Text("Past sessions stay in history.") },
             confirmButton = {
                 TextButton(onClick = { viewModel.delete(onBack) }) { Text("Delete", color = GymDanger) }
             },
             dismissButton = {
-                TextButton(onClick = { viewModel.askDelete(false) }) { Text("Cancel") }
+                TextButton(onClick = { viewModel.askDelete(false) }) { Text("Cancel", color = GymText) }
             },
         )
     }

@@ -32,7 +32,7 @@ Single user: no `User` table. Add `userId` later if needed.
 - `SessionSet` — reps, weightKg, warmup, completed. Every new session seeds **one** working set per exercise; weight/reps pre-fill from the last completed working set when history exists.
 - `Settings` — default rest seconds
 
-Finished sessions keep **name snapshots** so renaming a template does not rewrite history. Deleting a template does not delete sessions. Built-in program days cannot be changed; **Copy to Customize** duplicates them as normal workouts.
+Finished sessions keep **name snapshots** so renaming a template does not rewrite history. Deleting a template does not delete sessions. Built-in program days cannot be changed; **Copy to Customize** on a day duplicates that day as a normal workout.
 
 In-progress session is written on **Start**, deleted on **Cancel**, `finishedAt` set on **Finish**.
 
@@ -64,6 +64,6 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
-- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy
+- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy one day
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
-- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from Customize and copy program to Customize
+- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from Customize, copy one program day, Don't save on a new workout

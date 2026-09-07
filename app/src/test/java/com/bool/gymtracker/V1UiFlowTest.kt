@@ -23,6 +23,7 @@ import com.bool.gymtracker.di.LocalAppContainer
 import com.bool.gymtracker.ui.GymTrackerRoot
 import com.bool.gymtracker.ui.theme.GymTrackerTheme
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -55,6 +56,7 @@ class V1UiFlowTest {
 
         compose.onNodeWithText("Customize").performClick()
         compose.onNodeWithText("Create workout").performClick()
+        assertEquals(0, compose.onAllNodesWithText("Start").fetchSemanticsNodes().size)
         compose.onNodeWithText("Add exercise").performClick()
         compose.onNodeWithText("Search").performTextInput("Barbell bench")
         compose.waitUntil(5_000) {
@@ -65,8 +67,13 @@ class V1UiFlowTest {
             compose.onAllNodesWithText("Edit workout").fetchSemanticsNodes().isNotEmpty() &&
                 compose.onAllNodesWithText("Barbell bench press").fetchSemanticsNodes().isNotEmpty()
         }
+        assertEquals(0, compose.onAllNodesWithText("Start").fetchSemanticsNodes().size)
         compose.onNodeWithText("Save").performClick()
         compose.onNodeWithContentDescription("Back").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("New workout").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("New workout").performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
         }
@@ -81,6 +88,10 @@ class V1UiFlowTest {
         compose.onAllNodesWithText("Finish")[1].performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithContentDescription("Back").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Delete").fetchSemanticsNodes().isNotEmpty()
         }
         compose.onNodeWithContentDescription("Back").performClick()
         compose.onNodeWithText("History").performClick()
@@ -127,7 +138,7 @@ class V1UiFlowTest {
         compose.onNodeWithText("Save").performClick()
         compose.onNodeWithContentDescription("Back").performClick()
         compose.waitUntil(5_000) {
-            compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithText("Delete").fetchSemanticsNodes().isNotEmpty()
         }
         compose.onNodeWithText("Delete").performClick()
         compose.onNodeWithText("Delete workout?").assertIsDisplayed()
@@ -165,9 +176,41 @@ class V1UiFlowTest {
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Full Body — Day A").fetchSemanticsNodes().isNotEmpty()
         }
+        compose.onNodeWithText("Full Body — Day A").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Copy to Customize").fetchSemanticsNodes().isNotEmpty()
+        }
         compose.onNodeWithText("Copy to Customize").performClick()
         compose.waitUntil(8_000) {
             compose.onAllNodesWithText("Full Body — Day A (copy)").fetchSemanticsNodes().isNotEmpty()
+        }
+        db.close()
+    }
+
+    @Test
+    fun leavingNewWorkoutWithoutSaveRemovesIt() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        runBlocking {
+            db.exerciseDao().insertAll(ExerciseSeed.builtIn())
+            db.settingsDao().upsert(SettingsEntity(defaultRestSeconds = 90))
+        }
+        val container = AppContainer(context, db)
+
+        compose.setContent {
+            CompositionLocalProvider(LocalAppContainer provides container) {
+                GymTrackerTheme { GymTrackerRoot() }
+            }
+        }
+
+        compose.onNodeWithText("Customize").performClick()
+        compose.onNodeWithText("Create workout").performClick()
+        compose.onNodeWithContentDescription("Back").performClick()
+        compose.onNodeWithText("Don't save").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("No workouts yet").fetchSemanticsNodes().isNotEmpty()
         }
         db.close()
     }

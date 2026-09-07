@@ -14,7 +14,7 @@ object ProgramSeed {
         ),
         BuiltInProgram(
             key = "ppl",
-            title = "Push Pull Leg",
+            title = "Push Pull Leg program",
             blurb = "6 days (or 3). Push, pull, then legs, then repeat.",
         ),
         BuiltInProgram(

@@ -85,7 +85,7 @@ fun ProgressScreen(
             )
         },
     ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+        Column(Modifier.fillMaxSize().padding(padding).padding(16.dp).padding(bottom = 80.dp)) {
             OutlinedTextField(
                 value = query,
                 onValueChange = {

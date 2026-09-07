@@ -102,27 +102,26 @@ class WorkoutRepository(private val db: AppDatabase) {
             ),
         )
 
-    suspend fun copyProgram(programKey: String) {
+    suspend fun copyWorkout(workoutId: Long) {
+        val source = workouts.get(workoutId) ?: return
         db.withTransaction {
-            workouts.forProgram(programKey).forEach { source ->
-                val copyId = workouts.insert(
-                    WorkoutEntity(
-                        name = uniqueCopyName(source.name),
-                        createdAt = System.currentTimeMillis(),
-                        isBuiltIn = false,
-                        programKey = null,
-                        sortIndex = 0,
+            val copyId = workouts.insert(
+                WorkoutEntity(
+                    name = uniqueCopyName(source.name),
+                    createdAt = System.currentTimeMillis(),
+                    isBuiltIn = false,
+                    programKey = null,
+                    sortIndex = 0,
+                ),
+            )
+            items.forWorkout(source.id).sortedBy { it.position }.forEachIndexed { index, row ->
+                items.insert(
+                    WorkoutExerciseEntity(
+                        workoutId = copyId,
+                        exerciseId = row.exerciseId,
+                        position = index,
                     ),
                 )
-                items.forWorkout(source.id).sortedBy { it.position }.forEachIndexed { index, row ->
-                    items.insert(
-                        WorkoutExerciseEntity(
-                            workoutId = copyId,
-                            exerciseId = row.exerciseId,
-                            position = index,
-                        ),
-                    )
-                }
             }
         }
     }

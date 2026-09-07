@@ -68,7 +68,7 @@ fun HistoryScreen(
             EmptyState("No history yet", "Finished workouts will show up here.")
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+                modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp).padding(bottom = 80.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(items, key = { it.id }) { session ->

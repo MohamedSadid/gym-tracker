@@ -11,8 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +36,6 @@ import com.bool.gymtracker.domain.WorkoutSummary
 import com.bool.gymtracker.ui.components.GymCard
 import com.bool.gymtracker.ui.components.PrimaryButton
 import com.bool.gymtracker.ui.theme.GymBlack
-import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
 import com.bool.gymtracker.ui.theme.GymText
 import kotlinx.coroutines.flow.SharingStarted
@@ -71,7 +68,8 @@ fun WorkoutsHubScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp),
+                .padding(16.dp)
+                .padding(bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             GymCard(Modifier.fillMaxWidth().clickable(onClick = onPrograms)) {
@@ -122,24 +120,11 @@ fun ProgramsScreen(
 
 class ProgramDetailViewModel(
     programKey: String,
-    private val workouts: WorkoutRepository,
-    private val startSession: suspend (Long) -> Long,
+    workouts: WorkoutRepository,
 ) : ViewModel() {
     val program: BuiltInProgram? = ProgramSeed.definition(programKey)
     val days: StateFlow<List<WorkoutSummary>> = workouts.observeProgramDays(programKey)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    fun start(workoutId: Long, onStarted: (Long) -> Unit) {
-        viewModelScope.launch { onStarted(startSession(workoutId)) }
-    }
-
-    fun copy(onCopied: () -> Unit) {
-        val key = program?.key ?: return
-        viewModelScope.launch {
-            workouts.copyProgram(key)
-            onCopied()
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,8 +132,7 @@ class ProgramDetailViewModel(
 fun ProgramDetailScreen(
     programKey: String,
     onBack: () -> Unit,
-    onCopied: () -> Unit,
-    onStartSession: (Long) -> Unit,
+    onOpenDay: (Long) -> Unit,
 ) {
     val container = LocalAppContainer.current
     val viewModel: ProgramDetailViewModel = viewModel(
@@ -156,7 +140,7 @@ fun ProgramDetailScreen(
         factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                ProgramDetailViewModel(programKey, container.workouts, container.sessions::startFromWorkout) as T
+                ProgramDetailViewModel(programKey, container.workouts) as T
         },
     )
     val days by viewModel.days.collectAsStateWithLifecycle()
@@ -182,15 +166,84 @@ fun ProgramDetailScreen(
             item {
                 Text(program?.blurb.orEmpty(), color = GymMuted, modifier = Modifier.padding(top = 8.dp))
             }
-            item {
-                PrimaryButton("Copy to Customize", { viewModel.copy(onCopied) })
-            }
             items(days, key = { it.id }) { day ->
                 ProgramDayCard(
                     workout = day,
-                    onStart = { viewModel.start(day.id, onStartSession) },
+                    onOpen = { onOpenDay(day.id) },
                 )
             }
+        }
+    }
+}
+
+class ProgramDayViewModel(
+    private val workoutId: Long,
+    private val workouts: WorkoutRepository,
+    private val startSession: suspend (Long) -> Long,
+) : ViewModel() {
+    val detail = workouts.observeDetail(workoutId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    fun start(onStarted: (Long) -> Unit) {
+        viewModelScope.launch { onStarted(startSession(workoutId)) }
+    }
+
+    fun copy(onCopied: () -> Unit) {
+        viewModelScope.launch {
+            workouts.copyWorkout(workoutId)
+            onCopied()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProgramDayScreen(
+    workoutId: Long,
+    onBack: () -> Unit,
+    onCopied: () -> Unit,
+    onStartSession: (Long) -> Unit,
+) {
+    val container = LocalAppContainer.current
+    val viewModel: ProgramDayViewModel = viewModel(
+        key = "program-day-$workoutId",
+        factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                ProgramDayViewModel(workoutId, container.workouts, container.sessions::startFromWorkout) as T
+        },
+    )
+    val detail by viewModel.detail.collectAsStateWithLifecycle()
+    Scaffold(
+        containerColor = GymBlack,
+        topBar = {
+            TopAppBar(
+                title = { Text(detail?.name ?: "Day") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back", tint = GymText)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = GymBlack, titleContentColor = GymText),
+            )
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(detail?.exercises.orEmpty(), key = { it.exerciseId }) { item ->
+                    GymCard(Modifier.fillMaxWidth()) {
+                        Text(item.name, style = MaterialTheme.typography.titleMedium)
+                        Text(item.muscleGroup.label, color = GymMuted)
+                    }
+                }
+            }
+            if (detail?.isBuiltIn == true) {
+                PrimaryButton("Copy to Customize", { viewModel.copy(onCopied) })
+            }
+            PrimaryButton("Start", { viewModel.start(onStartSession) })
         }
     }
 }
@@ -198,11 +251,11 @@ fun ProgramDetailScreen(
 @Composable
 private fun ProgramDayCard(
     workout: WorkoutSummary,
-    onStart: () -> Unit,
+    onOpen: () -> Unit,
 ) {
     val workouts = LocalAppContainer.current.workouts
     val detail by workouts.observeDetail(workout.id).collectAsStateWithLifecycle(initialValue = null)
-    GymCard(Modifier.fillMaxWidth()) {
+    GymCard(Modifier.fillMaxWidth().clickable(onClick = onOpen)) {
         Text(workout.name, style = MaterialTheme.typography.titleLarge)
         val names = detail?.exercises.orEmpty()
         Text(
@@ -210,9 +263,5 @@ private fun ProgramDayCard(
             else names.joinToString("\n") { it.name },
             color = GymMuted,
         )
-        Button(
-            onClick = onStart,
-            colors = ButtonDefaults.buttonColors(containerColor = GymLime, contentColor = GymBlack),
-        ) { Text("Start") }
     }
 }

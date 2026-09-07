@@ -10,6 +10,14 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Fixed
 
+- [x] Customize: tapping a saved workout card did nothing. Whole card opens the workout. `WorkoutsScreen`.
+
+- [x] Customize: Start only after Save on a new workout. `EditWorkoutScreen`.
+- [x] Customize: system back gesture now shows Save / Don't save. `BackHandler`.
+- [x] Leave dialog Don't save was black-on-dark (`labelLarge`). Light text + brighter dialog. `EditWorkoutScreen`.
+- [x] Workouts hub jumped when the bottom bar appeared. NavHost no longer resizes for the bar. `GymTrackerRoot`.
+
+
 - [x] Session started with last session’s set count (e.g. Back squat → 2 sets). Now always 1 set; last working weight/reps still pre-fill. `SessionRepository.startFromWorkout`.
 - [x] Exercise picker added the same exercise twice. Blocked; 3s “This exercise is already added”. `ExercisePickerScreen` + `WorkoutRepository.addExercise`.
 - [x] Edit workout name fought backspaces / last letter. Local draft; tap clears; empty on leave keeps last saved name.
