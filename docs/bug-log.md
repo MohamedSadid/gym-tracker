@@ -4,6 +4,8 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Open
 
+- [ ] Session: leaving an in-progress workout via the back button or the phone back gesture does not ask anything. Expected a popup: **Finished** / **Cancel**.
+
 <!-- copy this line:
 - [ ] Short description. Where it happens. What you expected.
 -->

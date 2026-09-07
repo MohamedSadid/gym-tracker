@@ -12,6 +12,9 @@ Mark a box `[x]` when that item is done.
 - [ ] Change default rest in Settings and confirm the next session uses it
 - [ ] Try cancel: start a workout, leave without saving, confirm it is **not** in History
 - [ ] First git commit of the project (only when you ask — or you do it yourself)
+- [ ] Enhance in-app animation (screen transitions and session UI)
+- [ ] Add more exercises to the built-in library
+- [ ] Find a way to show how-to videos for exercises
 
 ## Later (not v1)
 
