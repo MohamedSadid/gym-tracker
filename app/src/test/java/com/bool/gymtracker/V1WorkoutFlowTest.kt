@@ -8,6 +8,7 @@ import com.bool.gymtracker.data.repository.ExerciseRepository
 import com.bool.gymtracker.data.repository.SessionRepository
 import com.bool.gymtracker.data.repository.WorkoutRepository
 import com.bool.gymtracker.data.seed.ExerciseSeed
+import com.bool.gymtracker.data.seed.ProgramSeed
 import com.bool.gymtracker.domain.MuscleGroup
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -163,6 +164,30 @@ class V1WorkoutFlowTest {
         val history = sessions.observeHistory().first()
         assertEquals(1, history.size)
         assertEquals("Push A", history.first().workoutName)
+    }
+
+    @Test
+    fun builtInProgramCannotBeEditedAndCopyGoesToCustomize() = runBlocking {
+        ProgramSeed.insertBuiltIns(db)
+        val days = workouts.observeProgramDays("full_body").first()
+        assertEquals(3, days.size)
+        val first = days.first()
+        assertEquals("Full Body — Day A", first.name)
+        assertEquals(6, first.exerciseCount)
+
+        workouts.rename(first.id, "Hacked")
+        workouts.delete(first.id)
+        val fly = exercises.observeAll().first().first { it.name == "Chest fly" }
+        assertEquals(false, workouts.addExercise(first.id, fly.id))
+        assertEquals("Full Body — Day A", workouts.observeDetail(first.id).first()?.name)
+        assertEquals(3, workouts.observeProgramDays("full_body").first().size)
+        assertTrue(workouts.observeSummaries().first().isEmpty())
+
+        workouts.copyProgram("full_body")
+        val custom = workouts.observeSummaries().first()
+        assertEquals(3, custom.size)
+        assertTrue(custom.all { it.name.endsWith("(copy)") })
+        assertEquals(3, workouts.observeProgramDays("full_body").first().size)
     }
 
     @Test

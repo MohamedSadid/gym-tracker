@@ -34,10 +34,16 @@ import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
 import com.bool.gymtracker.ui.workouts.EditWorkoutScreen
 import com.bool.gymtracker.ui.workouts.ExercisePickerScreen
+import com.bool.gymtracker.ui.workouts.ProgramDetailScreen
+import com.bool.gymtracker.ui.workouts.ProgramsScreen
+import com.bool.gymtracker.ui.workouts.WorkoutsHubScreen
 import com.bool.gymtracker.ui.workouts.WorkoutsScreen
 
 object Routes {
     const val Workouts = "workouts"
+    const val Programs = "programs"
+    const val ProgramDetail = "program/{programKey}"
+    const val Customize = "customize"
     const val History = "history"
     const val Progress = "progress"
     const val Settings = "settings"
@@ -47,6 +53,7 @@ object Routes {
     const val SessionDetail = "history/{sessionId}"
     const val ExerciseProgress = "progress/{exerciseId}"
 
+    fun program(key: String) = "program/$key"
     fun edit(id: Long) = "workout/$id"
     fun picker(id: Long) = "picker/$id"
     fun session(id: Long) = "session/$id"
@@ -105,10 +112,39 @@ fun GymTrackerRoot() {
             modifier = Modifier.padding(padding),
         ) {
             composable(Routes.Workouts) {
+                WorkoutsHubScreen(
+                    onPrograms = { nav.navigate(Routes.Programs) },
+                    onCustomize = { nav.navigate(Routes.Customize) },
+                    onSettings = { nav.navigate(Routes.Settings) },
+                )
+            }
+            composable(Routes.Programs) {
+                ProgramsScreen(
+                    onBack = { nav.popBackStack() },
+                    onOpenProgram = { nav.navigate(Routes.program(it)) },
+                )
+            }
+            composable(
+                Routes.ProgramDetail,
+                arguments = listOf(navArgument("programKey") { type = NavType.StringType }),
+            ) { entry ->
+                val key = entry.arguments?.getString("programKey") ?: return@composable
+                ProgramDetailScreen(
+                    programKey = key,
+                    onBack = { nav.popBackStack() },
+                    onCopied = {
+                        nav.navigate(Routes.Customize) {
+                            popUpTo(Routes.Workouts)
+                        }
+                    },
+                    onStartSession = { nav.navigate(Routes.session(it)) },
+                )
+            }
+            composable(Routes.Customize) {
                 WorkoutsScreen(
                     onOpenWorkout = { nav.navigate(Routes.edit(it)) },
                     onStartSession = { nav.navigate(Routes.session(it)) },
-                    onSettings = { nav.navigate(Routes.Settings) },
+                    onBack = { nav.popBackStack() },
                 )
             }
             composable(Routes.History) {

@@ -32,7 +32,14 @@ data class WorkoutExerciseItem(
 data class WorkoutDetail(
     val id: Long,
     val name: String,
+    val isBuiltIn: Boolean,
     val exercises: List<WorkoutExerciseItem>,
+)
+
+data class BuiltInProgram(
+    val key: String,
+    val title: String,
+    val blurb: String,
 )
 
 data class HistorySession(

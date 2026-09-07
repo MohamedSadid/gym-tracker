@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -77,7 +77,7 @@ class WorkoutsViewModel(
 fun WorkoutsScreen(
     onOpenWorkout: (Long) -> Unit,
     onStartSession: (Long) -> Unit,
-    onSettings: () -> Unit,
+    onBack: () -> Unit,
     viewModel: WorkoutsViewModel = appViewModel { WorkoutsViewModel(it.workouts, it.sessions::startFromWorkout) },
 ) {
     val workouts by viewModel.items.collectAsStateWithLifecycle()
@@ -86,13 +86,13 @@ fun WorkoutsScreen(
         containerColor = GymBlack,
         topBar = {
             TopAppBar(
-                title = { Text("Workouts") },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = GymBlack, titleContentColor = GymText),
-                actions = {
-                    IconButton(onClick = onSettings) {
-                        Icon(Icons.Outlined.Settings, contentDescription = "Settings", tint = GymMuted)
+                title = { Text("Customize") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back", tint = GymText)
                     }
                 },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = GymBlack, titleContentColor = GymText),
             )
         },
         floatingActionButton = {

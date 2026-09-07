@@ -17,6 +17,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.bool.gymtracker.data.local.AppDatabase
 import com.bool.gymtracker.data.local.SettingsEntity
 import com.bool.gymtracker.data.seed.ExerciseSeed
+import com.bool.gymtracker.data.seed.ProgramSeed
 import com.bool.gymtracker.di.AppContainer
 import com.bool.gymtracker.di.LocalAppContainer
 import com.bool.gymtracker.ui.GymTrackerRoot
@@ -52,6 +53,7 @@ class V1UiFlowTest {
             }
         }
 
+        compose.onNodeWithText("Customize").performClick()
         compose.onNodeWithText("Create workout").performClick()
         compose.onNodeWithText("Add exercise").performClick()
         compose.onNodeWithText("Search").performTextInput("Barbell bench")
@@ -80,6 +82,7 @@ class V1UiFlowTest {
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
         }
+        compose.onNodeWithContentDescription("Back").performClick()
         compose.onNodeWithText("History").performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("New workout").fetchSemanticsNodes().isNotEmpty()
@@ -119,6 +122,7 @@ class V1UiFlowTest {
             }
         }
 
+        compose.onNodeWithText("Customize").performClick()
         compose.onNodeWithText("Create workout").performClick()
         compose.onNodeWithText("Save").performClick()
         compose.onNodeWithContentDescription("Back").performClick()
@@ -130,6 +134,40 @@ class V1UiFlowTest {
         compose.onAllNodesWithText("Delete")[1].performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("No workouts yet").fetchSemanticsNodes().isNotEmpty()
+        }
+        db.close()
+    }
+
+    @Test
+    fun copyProgramAppearsInCustomize() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        runBlocking {
+            db.exerciseDao().insertAll(ExerciseSeed.builtIn())
+            ProgramSeed.insertBuiltIns(db)
+            db.settingsDao().upsert(SettingsEntity(defaultRestSeconds = 90))
+        }
+        val container = AppContainer(context, db)
+
+        compose.setContent {
+            CompositionLocalProvider(LocalAppContainer provides container) {
+                GymTrackerTheme { GymTrackerRoot() }
+            }
+        }
+
+        compose.onNodeWithText("Programs").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Full Body program").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Full Body program").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Full Body — Day A").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Copy to Customize").performClick()
+        compose.waitUntil(8_000) {
+            compose.onAllNodesWithText("Full Body — Day A (copy)").fetchSemanticsNodes().isNotEmpty()
         }
         db.close()
     }

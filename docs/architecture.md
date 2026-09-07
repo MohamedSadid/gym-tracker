@@ -25,14 +25,14 @@ Single user: no `User` table. Add `userId` later if needed.
 ## Data model
 
 - `Exercise` — id, name, muscle group, isCustom
-- `Workout` — id, name
+- `Workout` — id, name, isBuiltIn, programKey, sortIndex
 - `WorkoutExercise` — workout, exercise, position
 - `Session` — snapshot of workout name, started/finished
 - `SessionExercise` — snapshot of exercise name, position
 - `SessionSet` — reps, weightKg, warmup, completed. Every new session seeds **one** working set per exercise; weight/reps pre-fill from the last completed working set when history exists.
 - `Settings` — default rest seconds
 
-Finished sessions keep **name snapshots** so renaming a template does not rewrite history. Deleting a template does not delete sessions.
+Finished sessions keep **name snapshots** so renaming a template does not rewrite history. Deleting a template does not delete sessions. Built-in program days cannot be changed; **Copy to Customize** duplicates them as normal workouts.
 
 In-progress session is written on **Start**, deleted on **Cancel**, `finishedAt` set on **Finish**.
 
@@ -44,7 +44,7 @@ com.bool.gymtracker
   domain/
   data/local/
   data/repository/
-  data/seed/
+  data/seed/    exercises + 4 built-in programs
   di/           AppContainer
 ```
 
@@ -54,9 +54,9 @@ Kotlin, Jetpack Compose, single Activity, Compose Navigation, Room, ViewModel + 
 
 ## UI (v1)
 
-Bottom tabs: **Workouts**, **History**, **Progress**. Active session is full-screen (no tabs). Settings from the gear on Workouts.
+Bottom tabs: **Workouts** (hub), **History**, **Progress**. Active session is full-screen (no tabs). Settings from the gear on the Workouts hub.
 
-Core loop: Workouts → Start → log sets → rest → Finish → History / Progress.
+Core loop: Workouts → Customize or a program day → Start → log sets → rest → Finish → History / Progress.
 
 ## Build order (done)
 
@@ -64,6 +64,6 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
-- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history
+- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
-- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from the Workouts list
+- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from Customize and copy program to Customize

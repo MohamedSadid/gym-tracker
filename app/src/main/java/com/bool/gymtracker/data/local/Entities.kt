@@ -18,6 +18,9 @@ data class WorkoutEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val createdAt: Long,
+    val isBuiltIn: Boolean = false,
+    val programKey: String? = null,
+    val sortIndex: Int = 0,
 )
 
 @Entity(

@@ -72,6 +72,7 @@ class WorkoutRepository(private val db: AppDatabase) {
             WorkoutDetail(
                 id = workout.id,
                 name = workout.name,
+                isBuiltIn = workout.isBuiltIn,
                 exercises = rows.mapNotNull { row ->
                     val ex = byId[row.exerciseId] ?: return@mapNotNull null
                     WorkoutExerciseItem(
@@ -85,17 +86,69 @@ class WorkoutRepository(private val db: AppDatabase) {
             )
         }
 
+    fun observeProgramDays(programKey: String): Flow<List<WorkoutSummary>> =
+        workouts.observeProgramDays(programKey).map { rows ->
+            rows.map { WorkoutSummary(it.id, it.name, it.exerciseCount) }
+        }
+
     suspend fun create(name: String = "New workout"): Long =
-        workouts.insert(WorkoutEntity(name = name, createdAt = System.currentTimeMillis()))
+        workouts.insert(
+            WorkoutEntity(
+                name = name,
+                createdAt = System.currentTimeMillis(),
+                isBuiltIn = false,
+                programKey = null,
+                sortIndex = 0,
+            ),
+        )
+
+    suspend fun copyProgram(programKey: String) {
+        db.withTransaction {
+            workouts.forProgram(programKey).forEach { source ->
+                val copyId = workouts.insert(
+                    WorkoutEntity(
+                        name = uniqueCopyName(source.name),
+                        createdAt = System.currentTimeMillis(),
+                        isBuiltIn = false,
+                        programKey = null,
+                        sortIndex = 0,
+                    ),
+                )
+                items.forWorkout(source.id).sortedBy { it.position }.forEachIndexed { index, row ->
+                    items.insert(
+                        WorkoutExerciseEntity(
+                            workoutId = copyId,
+                            exerciseId = row.exerciseId,
+                            position = index,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun uniqueCopyName(base: String): String {
+        val first = "$base (copy)"
+        if (workouts.countByName(first) == 0) return first
+        var n = 2
+        while (workouts.countByName("$base (copy $n)") > 0) n++
+        return "$base (copy $n)"
+    }
+
+    private suspend fun editable(id: Long) = workouts.get(id)?.takeIf { !it.isBuiltIn }
 
     suspend fun rename(id: Long, name: String) {
-        val current = workouts.get(id) ?: return
+        val current = editable(id) ?: return
         workouts.update(current.copy(name = name.ifBlank { current.name }))
     }
 
-    suspend fun delete(id: Long) = workouts.delete(id)
+    suspend fun delete(id: Long) {
+        val current = editable(id) ?: return
+        workouts.delete(current.id)
+    }
 
     suspend fun addExercise(workoutId: Long, exerciseId: Long): Boolean {
+        if (editable(workoutId) == null) return false
         val existing = items.forWorkout(workoutId)
         if (existing.any { it.exerciseId == exerciseId }) return false
         items.insert(
@@ -109,6 +162,7 @@ class WorkoutRepository(private val db: AppDatabase) {
     }
 
     suspend fun replaceExercises(workoutId: Long, exerciseIds: List<Long>) {
+        if (editable(workoutId) == null) return
         db.withTransaction {
             items.deleteForWorkout(workoutId)
             exerciseIds.forEachIndexed { index, exerciseId ->
@@ -124,6 +178,7 @@ class WorkoutRepository(private val db: AppDatabase) {
     }
 
     suspend fun removeExercise(workoutExerciseId: Long, workoutId: Long) {
+        if (editable(workoutId) == null) return
         items.delete(workoutExerciseId)
         items.forWorkout(workoutId).sortedBy { it.position }.forEachIndexed { index, row ->
             items.updatePosition(row.id, index)
@@ -131,6 +186,7 @@ class WorkoutRepository(private val db: AppDatabase) {
     }
 
     suspend fun moveExercise(workoutId: Long, workoutExerciseId: Long, delta: Int) {
+        if (editable(workoutId) == null) return
         val rows = items.forWorkout(workoutId).sortedBy { it.position }.toMutableList()
         val index = rows.indexOfFirst { it.id == workoutExerciseId }
         val target = index + delta

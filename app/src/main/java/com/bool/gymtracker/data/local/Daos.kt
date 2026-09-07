@@ -12,6 +12,9 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercises ORDER BY name COLLATE NOCASE")
     fun observeAll(): Flow<List<ExerciseEntity>>
 
+    @Query("SELECT * FROM exercises ORDER BY name COLLATE NOCASE")
+    suspend fun listAll(): List<ExerciseEntity>
+
     @Query("SELECT * FROM exercises WHERE id = :id")
     suspend fun get(id: Long): ExerciseEntity?
 
@@ -46,11 +49,34 @@ interface WorkoutDao {
                COUNT(workout_exercises.id) AS exerciseCount
         FROM workouts
         LEFT JOIN workout_exercises ON workout_exercises.workoutId = workouts.id
+        WHERE workouts.isBuiltIn = 0
         GROUP BY workouts.id
         ORDER BY workouts.name COLLATE NOCASE
         """,
     )
     fun observeSummaries(): Flow<List<WorkoutSummaryRow>>
+
+    @Query(
+        """
+        SELECT workouts.id AS id, workouts.name AS name,
+               COUNT(workout_exercises.id) AS exerciseCount
+        FROM workouts
+        LEFT JOIN workout_exercises ON workout_exercises.workoutId = workouts.id
+        WHERE workouts.isBuiltIn = 1 AND workouts.programKey = :programKey
+        GROUP BY workouts.id
+        ORDER BY workouts.sortIndex, workouts.name COLLATE NOCASE
+        """,
+    )
+    fun observeProgramDays(programKey: String): Flow<List<WorkoutSummaryRow>>
+
+    @Query("SELECT COUNT(*) FROM workouts WHERE isBuiltIn = 1")
+    suspend fun countBuiltIn(): Int
+
+    @Query("SELECT COUNT(*) FROM workouts WHERE name = :name COLLATE NOCASE")
+    suspend fun countByName(name: String): Int
+
+    @Query("SELECT * FROM workouts WHERE isBuiltIn = 1 AND programKey = :programKey ORDER BY sortIndex")
+    suspend fun forProgram(programKey: String): List<WorkoutEntity>
 
     @Query("SELECT * FROM workouts ORDER BY name COLLATE NOCASE")
     fun observeAll(): Flow<List<WorkoutEntity>>

@@ -29,4 +29,4 @@ Mark a box `[x]` when that item is done.
 - [x] Android app: workouts, exercises, logging, rest timer, history, progression
 - [x] Debug APK build
 - [x] Automated tests (data flow, rest timer, UI smoke)
-- [x] Session always starts with one set; duplicate exercises blocked; warm-up via set menu; edit workout Save / Cancel
+- [x] Workouts hub, built-in programs, copy into Customize
