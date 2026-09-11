@@ -1,11 +1,26 @@
 package com.bool.gymtracker.domain
 
 enum class MuscleGroup(val label: String) {
-    PUSH("Push"),
-    PULL("Pull"),
+    CHEST("Chest"),
+    BACK("Back"),
+    SHOULDERS("Shoulders"),
+    ARMS("Arms"),
     LEGS("Legs"),
-    CORE("Core"),
+    ABS("Abs"),
     OTHER("Other"),
+}
+
+enum class CoverageRegion(val reportLabel: String) {
+    QUADS("quads"),
+    HAMSTRINGS("hamstrings"),
+    CALVES("calves"),
+    LATERAL("lateral delts"),
+    REAR("rear delts"),
+    FRONT("front delts"),
+    BICEPS("biceps"),
+    TRICEPS("triceps"),
+    FLEXORS("flexors"),
+    EXTENSORS("extensors"),
 }
 
 data class Exercise(
@@ -60,6 +75,7 @@ data class SessionSetDetail(
 
 data class SessionExerciseDetail(
     val name: String,
+    val muscleGroup: MuscleGroup,
     val sets: List<SessionSetDetail>,
 )
 

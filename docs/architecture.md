@@ -14,7 +14,7 @@ UI (Compose) → ViewModels → repositories → Room (SQLite on device)
 | ViewModels | Screen state, rest timer, survive rotation |
 | `data/repository/` | Load/save workouts, sessions, exercises |
 | `data/local/` | Room entities, DAOs, `AppDatabase` |
-| `domain/` | Models (`Exercise`, `HistorySession`, `RestTimerState`, …) |
+| `domain/` | Models (`Exercise`, `HistorySession`, `RestTimerState`, …). Performance: volume, weekly rollup, coverage, advisor messages (pure functions; no I/O). |
 
 Wiring today: `AppContainer` (simple constructor DI). Hilt can replace this later.
 
@@ -24,29 +24,31 @@ Single user: no `User` table. Add `userId` later if needed.
 
 ## Data model
 
-- `Exercise` — id, name, muscle group, isCustom
+- `Exercise` — id, name, **primary muscle** (`CHEST`, `BACK`, `SHOULDERS`, `ARMS`, `LEGS`, `ABS`, `OTHER`), isCustom. Optional silent **coverage region** on built-in Legs / Shoulders / Arms lifts (not a picker chip). Legs: `QUADS` / `HAMSTRINGS` / `CALVES`. Shoulders: `LATERAL` / `REAR` / `FRONT`. Arms: `BICEPS` / `TRICEPS` / `FLEXORS` / `EXTENSORS` (forearm). Replaces Push / Pull / Core / Other as the only user-facing grouping. Ambiguous built-ins pick one home (e.g. face pull → Shoulders + rear). Room **2→3** remaps stored `exercises.muscleGroup` by built-in name; leftover `CORE` → `ABS`, `PUSH`/`PULL` → `OTHER`.
 - `Workout` — id, name, isBuiltIn, programKey, sortIndex
 - `WorkoutExercise` — workout, exercise, position
 - `Session` — snapshot of workout name, started/finished
-- `SessionExercise` — snapshot of exercise name, position
+- `SessionExercise` — snapshot of exercise name, **primary muscle**, optional **coverage region**, and position. Copied from the library on **Start**. Room **3→4** adds `muscleGroupSnapshot`; Room **4→5** adds `coverageRegion` / `coverageRegionSnapshot` and backfills from the seed map.
 - `SessionSet` — reps, weightKg, warmup, completed. Every new session seeds **one** working set per exercise; weight/reps pre-fill from the last completed working set when history exists.
 - `Settings` — default rest seconds
 
-Finished sessions keep **name snapshots** so renaming a template does not rewrite history. Deleting a template does not delete sessions. Built-in program days cannot be changed; **Copy to Customize** on a day duplicates that day as a normal workout.
+Finished sessions keep **name and primary-muscle snapshots** so renaming a template or remapping a lift does not rewrite history. Deleting a template does not delete sessions. Built-in program days cannot be changed; **Copy to Customize** on a day duplicates that day as a normal workout.
 
-In-progress session is written on **Start**, deleted on **Cancel**, `finishedAt` set on **Finish**.
+In-progress session is written on **Start**, deleted on **Cancel**, `finishedAt` set on **Finish** (including Finish from the back dialog). System back on the session screen is intercepted (`BackHandler`) and does not pop until Finish or the user already left via Cancel.
 
 ## Packages
 
 ```
 com.bool.gymtracker
   ui/           workouts, session, history, progress, settings, theme
-  domain/
+  domain/       models, RestTimerState, performance (volume / coverage / advisor)
   data/local/
   data/repository/
-  data/seed/    exercises + 4 built-in programs
+  data/seed/    exercises (missing built-ins inserted on launch) + 4 built-in programs
   di/           AppContainer
 ```
+
+Performance stays in-process: repositories load finished sets → `domain/performance` computes small-volume, weekly Total-volume (Mon–Sun, device local), coverage vs targets, and 3-week trend messages. Coverage never writes workouts or programs. Progress shows last-week volume, shortfalls, and trend cards. No backend, no extra services.
 
 ## Stack
 
@@ -64,6 +66,9 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
-- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy one day
+- `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy one day, session keeps primary muscle if the library remaps, coverage region snapshot, weekly volume from finished working sets, finish leaves incomplete sets out of volume
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
+- `VolumeTest` — working-set small-volume, Total-volume per muscle, Mon–Sun week in local time, warm-ups / incomplete / unfinished excluded
+- `CoverageTest` — 2× sessions, set targets, Legs/Shoulders/Arms regions, unclassified skip, Other ignored, ended week only
+- `InsightsTest` — 3-week flat (±2%), rise (+10% both steps), fall (−12%), no band without three weeks of volume
 - `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from Customize, copy one program day, Don't save on a new workout

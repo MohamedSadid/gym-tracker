@@ -10,6 +10,20 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Built-in library: 25 extra lifts (coverage holes + StrengthLog/BurnFit staples). Missing names insert on launch. `ExerciseSeed`, `AppDatabase.seedIfNeeded`.
+
+- [x] Progress: last-week Total-volume, 3-week flat / rise / fall cards. `Insights.kt`, `ProgressScreen`.
+
+- [x] Coverage report always shows **2 sessions** for every required muscle (Chest, Back, Shoulders, Arms, Legs, Abs), not only Chest/Back/Abs. `formatCoverageShortfall`.
+
+- [x] Coverage from logs only: 2× + set targets (Legs 24 with 8/8/8, Shoulders 12 with 6/3/3, Arms 18 with 6/6/3/3); ended-week Progress shortfall report. `Coverage.kt`, Room 4→5.
+
+- [x] Volume: small-volume per exercise and Total-volume per muscle, Mon–Sun week, finished working sets only. `domain/performance/Volume.kt`.
+
+- [x] Session logs snapshot primary muscle on Start. `SessionExerciseEntity.muscleGroupSnapshot`, Room 3→4.
+
+- [x] Exercises: replace Push / Pull / Core with primary muscle (Chest, Back, Shoulders, Arms, Legs, Abs, Other) on the picker and cards. `MuscleGroup`, `ExerciseSeed`, Room 2→3.
+
 - [x] Customize: **Edit** has no Start; tap the card to open and start. `WorkoutsScreen` + `ProgramDayScreen`.
 
 - [x] Customize: leave new workout asks Save / Don't save; Don't save deletes. Start only inside opened workout. `EditWorkoutScreen`.

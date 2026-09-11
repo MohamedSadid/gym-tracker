@@ -39,6 +39,9 @@ interface ExerciseDao {
 
     @Insert
     suspend fun insertAll(entities: List<ExerciseEntity>)
+
+    @Update
+    suspend fun update(entity: ExerciseEntity)
 }
 
 @Dao
@@ -244,6 +247,24 @@ interface SessionSetDao {
         """,
     )
     suspend fun setsForSessionExercise(sessionId: Long, exerciseId: Long): List<SessionSetEntity>
+
+    @Query(
+        """
+        SELECT session_exercises.exerciseId AS exerciseId,
+               session_exercises.muscleGroupSnapshot AS muscleGroupSnapshot,
+               session_exercises.coverageRegionSnapshot AS coverageRegionSnapshot,
+               sessions.id AS sessionId,
+               session_sets.weightKg AS weightKg,
+               session_sets.reps AS reps,
+               sessions.finishedAt AS finishedAt,
+               session_sets.completed AS completed,
+               session_sets.isWarmup AS isWarmup
+        FROM session_sets
+        INNER JOIN session_exercises ON session_exercises.id = session_sets.sessionExerciseId
+        INNER JOIN sessions ON sessions.id = session_exercises.sessionId
+        """,
+    )
+    suspend fun volumeSetRows(): List<VolumeSetRow>
 }
 
 data class WorkoutSummaryRow(
@@ -257,6 +278,18 @@ data class CompletedSetRow(
     val finishedAt: Long,
     val reps: Int,
     val weightKg: Double,
+    val isWarmup: Boolean,
+)
+
+data class VolumeSetRow(
+    val exerciseId: Long,
+    val muscleGroupSnapshot: String,
+    val coverageRegionSnapshot: String?,
+    val sessionId: Long,
+    val weightKg: Double,
+    val reps: Int,
+    val finishedAt: Long?,
+    val completed: Boolean,
     val isWarmup: Boolean,
 )
 

@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
         SessionSetEntity::class,
         SettingsEntity::class,
     ],
-    version = 2,
+    version = 5,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -38,6 +38,10 @@ abstract class AppDatabase : RoomDatabase() {
         scope.launch(Dispatchers.IO) {
             if (exerciseDao().count() == 0) {
                 exerciseDao().insertAll(ExerciseSeed.builtIn())
+            } else {
+                val existing = exerciseDao().listAll().map { it.name.lowercase() }.toSet()
+                val missing = ExerciseSeed.builtIn().filter { it.name.lowercase() !in existing }
+                if (missing.isNotEmpty()) exerciseDao().insertAll(missing)
             }
             if (workoutDao().countBuiltIn() == 0) {
                 ProgramSeed.insertBuiltIns(this@AppDatabase)
@@ -57,9 +61,60 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                ExerciseSeed.builtIn().forEach { exercise ->
+                    db.execSQL(
+                        "UPDATE exercises SET muscleGroup = ? WHERE name = ? AND isCustom = 0",
+                        arrayOf(exercise.muscleGroup, exercise.name),
+                    )
+                }
+                db.execSQL("UPDATE exercises SET muscleGroup = 'ABS' WHERE muscleGroup = 'CORE'")
+                db.execSQL("UPDATE exercises SET muscleGroup = 'OTHER' WHERE muscleGroup IN ('PUSH', 'PULL')")
+            }
+        }
+
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE session_exercises ADD COLUMN muscleGroupSnapshot TEXT NOT NULL DEFAULT 'OTHER'",
+                )
+                db.execSQL(
+                    """
+                    UPDATE session_exercises
+                    SET muscleGroupSnapshot = COALESCE(
+                        (SELECT muscleGroup FROM exercises WHERE exercises.id = session_exercises.exerciseId),
+                        'OTHER'
+                    )
+                    """.trimIndent(),
+                )
+            }
+        }
+
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE exercises ADD COLUMN coverageRegion TEXT")
+                db.execSQL("ALTER TABLE session_exercises ADD COLUMN coverageRegionSnapshot TEXT")
+                ExerciseSeed.builtIn().forEach { exercise ->
+                    db.execSQL(
+                        "UPDATE exercises SET coverageRegion = ? WHERE name = ? AND isCustom = 0",
+                        arrayOf(exercise.coverageRegion, exercise.name),
+                    )
+                }
+                db.execSQL(
+                    """
+                    UPDATE session_exercises
+                    SET coverageRegionSnapshot = (
+                        SELECT coverageRegion FROM exercises WHERE exercises.id = session_exercises.exerciseId
+                    )
+                    """.trimIndent(),
+                )
+            }
+        }
+
         fun create(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, "gym-tracker.db")
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                 .build()
     }
 }

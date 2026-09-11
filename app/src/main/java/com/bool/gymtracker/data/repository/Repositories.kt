@@ -13,6 +13,7 @@ import com.bool.gymtracker.domain.Exercise
 import com.bool.gymtracker.domain.ExerciseProgression
 import com.bool.gymtracker.domain.HistorySession
 import com.bool.gymtracker.domain.MuscleGroup
+import com.bool.gymtracker.domain.CoverageRegion
 import com.bool.gymtracker.domain.ProgressionPoint
 import com.bool.gymtracker.domain.SessionDetail
 import com.bool.gymtracker.domain.SessionExerciseDetail
@@ -20,12 +21,26 @@ import com.bool.gymtracker.domain.SessionSetDetail
 import com.bool.gymtracker.domain.WorkoutDetail
 import com.bool.gymtracker.domain.WorkoutExerciseItem
 import com.bool.gymtracker.domain.WorkoutSummary
+import com.bool.gymtracker.domain.performance.ProgressEngineReport
+import com.bool.gymtracker.domain.performance.progressEngineReport as computeProgressEngineReport
+import com.bool.gymtracker.domain.performance.coverageShortfallsForEndedWeek
+import com.bool.gymtracker.domain.performance.MuscleCoverage
+import com.bool.gymtracker.domain.performance.SessionSetLog
+import com.bool.gymtracker.domain.performance.WeeklyExerciseVolume
+import com.bool.gymtracker.domain.performance.WeeklyMuscleVolume
+import com.bool.gymtracker.domain.performance.weeklyExerciseVolumes as rollupExerciseVolumes
+import com.bool.gymtracker.domain.performance.weeklyMuscleVolumes as rollupMuscleVolumes
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 private fun muscleGroupOf(raw: String): MuscleGroup =
     MuscleGroup.entries.find { it.name == raw } ?: MuscleGroup.OTHER
+
+private fun coverageRegionOf(raw: String?): CoverageRegion? =
+    raw?.let { CoverageRegion.entries.find { region -> region.name == it } }
 
 private fun ExerciseEntity.toModel() = Exercise(
     id = id,
@@ -233,6 +248,8 @@ class SessionRepository(private val db: AppDatabase) {
                     sessionId = sessionId,
                     exerciseId = we.exerciseId,
                     exerciseNameSnapshot = exercise?.name ?: "Exercise",
+                    muscleGroupSnapshot = exercise?.muscleGroup ?: MuscleGroup.OTHER.name,
+                    coverageRegionSnapshot = exercise?.coverageRegion,
                     position = position,
                 ),
             )
@@ -378,6 +395,7 @@ class SessionRepository(private val db: AppDatabase) {
             exercises = exerciseRows.map { row ->
                 SessionExerciseDetail(
                     name = row.exerciseNameSnapshot,
+                    muscleGroup = muscleGroupOf(row.muscleGroupSnapshot),
                     sets = sets.forExercise(row.id).filter { it.completed }.map {
                         SessionSetDetail(it.setIndex, it.reps, it.weightKg, it.isWarmup)
                     },
@@ -403,6 +421,38 @@ class SessionRepository(private val db: AppDatabase) {
             ProgressionPoint(top.finishedAt, top.weightKg, top.reps)
         }.sortedBy { it.finishedAt }
     }
+
+    suspend fun weeklyExerciseVolumes(zone: ZoneId = ZoneId.systemDefault()): List<WeeklyExerciseVolume> =
+        rollupExerciseVolumes(volumeSetLogs(), zone)
+
+    suspend fun weeklyMuscleVolumes(zone: ZoneId = ZoneId.systemDefault()): List<WeeklyMuscleVolume> =
+        rollupMuscleVolumes(volumeSetLogs(), zone)
+
+    suspend fun progressEngineReport(
+        zone: ZoneId = ZoneId.systemDefault(),
+        today: LocalDate = LocalDate.now(zone),
+    ): ProgressEngineReport = computeProgressEngineReport(volumeSetLogs(), zone, today)
+
+    suspend fun endedWeekCoverageShortfalls(
+        zone: ZoneId = ZoneId.systemDefault(),
+        today: LocalDate = LocalDate.now(zone),
+    ): List<MuscleCoverage> =
+        coverageShortfallsForEndedWeek(volumeSetLogs(), zone, today)
+
+    private suspend fun volumeSetLogs(): List<SessionSetLog> =
+        sets.volumeSetRows().map { row ->
+            SessionSetLog(
+                exerciseId = row.exerciseId,
+                muscle = muscleGroupOf(row.muscleGroupSnapshot),
+                weightKg = row.weightKg,
+                reps = row.reps,
+                finishedAt = row.finishedAt,
+                completed = row.completed,
+                isWarmup = row.isWarmup,
+                sessionId = row.sessionId,
+                region = coverageRegionOf(row.coverageRegionSnapshot),
+            )
+        }
 
     private fun SessionSetEntity.toActive() = ActiveSet(
         id = id,

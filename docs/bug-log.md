@@ -4,13 +4,14 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Open
 
-- [ ] Session: leaving an in-progress workout via the back button or the phone back gesture does not ask anything. Expected a popup: **Finished** / **Cancel**.
-
 <!-- copy this line:
 - [ ] Short description. Where it happens. What you expected.
 -->
 
 ## Fixed
+
+- [x] Session back / system back gesture discarded the workout with no prompt. Now asks **Finish** / **Resume**. Finish saves; incomplete sets stay incomplete (0 toward volume). `SessionScreen` BackHandler.
+- [x] Rest timer digits and Pause / +15s / Skip were dark (`labelLarge` is black). Forced light/lime labels. `RestBar`.
 
 - [x] Customize: tapping a saved workout card did nothing. Whole card opens the workout. `WorkoutsScreen`.
 

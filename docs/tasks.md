@@ -13,8 +13,19 @@ Mark a box `[x]` when that item is done.
 - [ ] Try cancel: start a workout, leave without saving, confirm it is **not** in History
 - [ ] First git commit of the project (only when you ask — or you do it yourself)
 - [ ] Enhance in-app animation (screen transitions and session UI)
-- [ ] Add more exercises to the built-in library
+- [x] Extend the built-in exercise library (more lifts, including forearm extensors and better region coverage)
 - [ ] Find a way to show how-to videos for exercises
+
+### Performance engine (do in order)
+
+- [x] Switch exercises to primary muscle (Chest, Back, Shoulders, Arms, Legs, Abs, Other); remap seed + picker; drop Push / Pull / Core chips
+- [x] Snapshot primary muscle on session exercises
+- [x] Volume math: small-volume per exercise, Total-volume per muscle; working sets only
+- [x] Weekly rollup (Mon–Sun) per primary muscle
+- [x] Coverage from logs only (do not change programs, picker, or session): 2 sessions/week + set targets (Chest 10, Back 10, Abs 4, Shoulders 12 with 6/3/3 delts, Arms 18 with 6/6/3/3, Legs 24 with 8/8/8); after each ended week, Progress report of insufficient muscles
+- [x] Progress UI: weekly Total-volume (coverage shortfall report is the previous task; no session popups)
+- [x] Insights after 3 weeks: flat ±2%, rise ≥+10% both weeks, fall ≤−12%
+- [x] Unit tests for volume, coverage, and the three trend bands
 
 ## Later (not v1)
 

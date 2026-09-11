@@ -38,15 +38,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.bool.gymtracker.data.repository.ExerciseRepository
-import com.bool.gymtracker.data.repository.SessionRepository
 import com.bool.gymtracker.data.repository.formatWeight
 import com.bool.gymtracker.di.LocalAppContainer
 import com.bool.gymtracker.di.appViewModel
 import com.bool.gymtracker.domain.Exercise
 import com.bool.gymtracker.domain.ExerciseProgression
+import com.bool.gymtracker.domain.performance.ProgressEngineReport
+import com.bool.gymtracker.domain.performance.formatCoverageShortfall
+import com.bool.gymtracker.domain.performance.formatInsight
+import com.bool.gymtracker.domain.performance.formatVolumeLine
 import com.bool.gymtracker.ui.components.EmptyState
 import com.bool.gymtracker.ui.components.GymCard
 import com.bool.gymtracker.ui.components.formatDateTime
+import com.bool.gymtracker.ui.theme.GymAmber
 import com.bool.gymtracker.ui.theme.GymBlack
 import com.bool.gymtracker.ui.theme.GymLime
 import com.bool.gymtracker.ui.theme.GymMuted
@@ -75,6 +79,13 @@ fun ProgressScreen(
     viewModel: ProgressViewModel = appViewModel { ProgressViewModel(it.exercises) },
 ) {
     val items by viewModel.items.collectAsStateWithLifecycle()
+    val sessions = LocalAppContainer.current.sessions
+    val report by produceState(ProgressEngineReport(emptyList(), emptyList(), emptyList())) {
+        value = sessions.progressEngineReport()
+    }
+    val shortfalls = report.shortfalls
+    val volumes = report.volumes
+    val insights = report.insights
     var query by remember { mutableStateOf("") }
     Scaffold(
         containerColor = GymBlack,
@@ -96,10 +107,35 @@ fun ProgressScreen(
                 singleLine = true,
                 label = { Text("Search exercise") },
             )
-            if (items.isEmpty()) {
+            if (items.isEmpty() && shortfalls.isEmpty() && volumes.isEmpty() && insights.isEmpty()) {
                 EmptyState("No exercises", "Add a custom exercise from a workout if the list is empty.")
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (volumes.isNotEmpty() || shortfalls.isNotEmpty()) {
+                        item {
+                            Text("Last week", color = GymMuted, style = MaterialTheme.typography.titleSmall)
+                        }
+                    }
+                    items(volumes, key = { "vol-${it.muscle}" }) { volume ->
+                        GymCard(Modifier.fillMaxWidth()) {
+                            Text(formatVolumeLine(volume), style = MaterialTheme.typography.titleMedium)
+                        }
+                    }
+                    items(shortfalls, key = { "short-${it.muscle}" }) { coverage ->
+                        GymCard(Modifier.fillMaxWidth()) {
+                            Text(formatCoverageShortfall(coverage), color = GymAmber)
+                        }
+                    }
+                    if (insights.isNotEmpty()) {
+                        item {
+                            Text("3-week trend", color = GymMuted, style = MaterialTheme.typography.titleSmall)
+                        }
+                        items(insights, key = { "trend-${it.muscle}" }) { insight ->
+                            GymCard(Modifier.fillMaxWidth()) {
+                                Text(formatInsight(insight))
+                            }
+                        }
+                    }
                     items(items, key = { it.id }) { exercise ->
                         ExerciseProgressRow(exercise, onClick = { onOpen(exercise.id) })
                     }

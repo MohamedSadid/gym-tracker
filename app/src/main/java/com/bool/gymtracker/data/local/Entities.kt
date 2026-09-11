@@ -11,6 +11,7 @@ data class ExerciseEntity(
     val name: String,
     val muscleGroup: String,
     val isCustom: Boolean,
+    val coverageRegion: String? = null,
 )
 
 @Entity(tableName = "workouts")
@@ -74,6 +75,8 @@ data class SessionExerciseEntity(
     val sessionId: Long,
     val exerciseId: Long,
     val exerciseNameSnapshot: String,
+    val muscleGroupSnapshot: String,
+    val coverageRegionSnapshot: String? = null,
     val position: Int,
 )
 

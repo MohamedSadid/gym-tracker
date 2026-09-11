@@ -1,5 +1,6 @@
 package com.bool.gymtracker.ui.session
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -113,6 +114,7 @@ data class SessionUiState(
     val restDone: Boolean = false,
     val confirmCancel: Boolean = false,
     val confirmFinish: Boolean = false,
+    val confirmLeave: Boolean = false,
 )
 
 class SessionViewModel(
@@ -250,6 +252,7 @@ class SessionViewModel(
 
     fun askCancel(show: Boolean) = _state.update { it.copy(confirmCancel = show) }
     fun askFinish(show: Boolean) = _state.update { it.copy(confirmFinish = show) }
+    fun askLeave(show: Boolean) = _state.update { it.copy(confirmLeave = show) }
 
     fun cancel(onDone: () -> Unit) {
         viewModelScope.launch {
@@ -322,6 +325,7 @@ fun SessionScreen(sessionId: Long, onExit: () -> Unit) {
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) { /* keep composition subscribed */ }
+    BackHandler { viewModel.askLeave(true) }
 
     Scaffold(
         containerColor = GymBlack,
@@ -376,7 +380,16 @@ fun SessionScreen(sessionId: Long, onExit: () -> Unit) {
             title = { Text("Leave without saving?") },
             text = { Text("This session will be discarded.") },
             confirmButton = { TextButton(onClick = { viewModel.cancel(onExit) }) { Text("Discard", color = GymDanger) } },
-            dismissButton = { TextButton(onClick = { viewModel.askCancel(false) }) { Text("Keep logging") } },
+            dismissButton = { TextButton(onClick = { viewModel.askCancel(false) }) { Text("Keep logging", color = GymText) } },
+        )
+    }
+    if (state.confirmLeave) {
+        AlertDialog(
+            onDismissRequest = { viewModel.askLeave(false) },
+            title = { Text("Leave session?") },
+            text = { Text("Finish saves completed sets for history and weekly volume. Incomplete sets count as 0. Resume keeps logging.") },
+            confirmButton = { TextButton(onClick = { viewModel.finish(onExit) }) { Text("Finish", color = GymLime) } },
+            dismissButton = { TextButton(onClick = { viewModel.askLeave(false) }) { Text("Resume", color = GymText) } },
         )
     }
     if (state.confirmFinish) {
@@ -410,13 +423,15 @@ private fun RestBar(
     ) {
         Text(
             if (done) "Rest done" else "%d:%02d".format(left / 60, left % 60),
-            color = if (done) GymLime else GymText,
+            color = GymLime,
             fontSize = 40.sp,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
-            TextButton(onClick = if (running) onPause else onResume) { Text(if (running) "Pause" else "Resume") }
-            TextButton(onClick = onPlus) { Text("+15s") }
-            TextButton(onClick = onSkip) { Text("Skip") }
+            TextButton(onClick = if (running) onPause else onResume) {
+                Text(if (running) "Pause" else "Resume", color = GymText)
+            }
+            TextButton(onClick = onPlus) { Text("+15s", color = GymText) }
+            TextButton(onClick = onSkip) { Text("Skip", color = GymLime) }
         }
     }
 }
