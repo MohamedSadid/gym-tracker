@@ -48,6 +48,8 @@ com.bool.gymtracker
   di/           AppContainer
 ```
 
+Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `lockout` / `bottom` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/`. Rules: `docs/exercise-demo-criteria.md`. Builder: `tools/make_exercise_loop.py`.
+
 Performance stays in-process: repositories load finished sets → `domain/performance` computes small-volume, weekly Total-volume (Mon–Sun, device local), coverage vs targets, and 3-week trend messages. Coverage never writes workouts or programs. Progress shows last-week volume, shortfalls, and trend cards. No backend, no extra services.
 
 ## Stack
