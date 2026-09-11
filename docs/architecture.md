@@ -48,7 +48,7 @@ com.bool.gymtracker
   di/           AppContainer
 ```
 
-Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `lockout` / `bottom` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/` (`{slug}_lockout.png` / `{slug}_bottom.png`, plus the APNG loop). `ExerciseDemos` maps built-in names to those assets and tip strings; Compose swaps the two stills (~700 ms). `ExerciseTargetMuscles` maps every built-in name to main and auxiliary labels for the demo screen; custom lifts fall back to the chosen primary muscle. Custom lifts are not in the demo-asset map. Rules: `docs/exercise-demo-criteria.md`. Builder: `tools/make_exercise_loop.py`.
+Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `lockout` / `bottom` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/` (`{slug}_lockout.png` / `{slug}_bottom.png`, plus the APNG loop). `ExerciseDemos` maps built-in names to those assets and tip strings; Compose swaps the two stills (~700 ms). `ExerciseTargetMuscles` maps every built-in name to main and auxiliary labels for the demo screen; custom lifts fall back to the chosen primary muscle. Custom lifts are not in the demo-asset map. Rules: `docs/exercise-demo-criteria.md`. Region IDs: `docs/exercise-muscle-map.md`. Builder: `tools/make_exercise_loop.py`.
 
 Performance stays in-process: repositories load finished sets → `domain/performance` computes small-volume, weekly Total-volume (Mon–Sun, device local), coverage vs targets, and 3-week trend messages. Coverage never writes workouts or programs. Progress shows last-week volume, shortfalls, and trend cards. No backend, no extra services.
 

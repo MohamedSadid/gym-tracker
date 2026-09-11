@@ -9,5 +9,6 @@ When creating or changing exercise how-to stills, loops, or the shared mannequin
 
 - Same character, high camera, zoom crop, and black shorts as that file describes.
 - Primary muscles: **opaque** lime `#B8F000` (~90%). Auxiliary: **pale wash** `#D4E88A` (~40%). Keep `_character/reference.png` unpainted. Per-lift map is in the criteria file.
+- Muscle **region IDs** are in `docs/exercise-muscle-map.md`. Paint only the IDs named for that lift. **D3** is side / lateral delt.
 - Save stills and loops under `content/exercises/` in this repo (see `content/exercises/README.md`). Copy loops into `app/src/main/assets/exercises/` when they should ship with the app.
 - Do not invent a new look, camera, or file layout that contradicts the criteria.

@@ -32,6 +32,8 @@ Holds with no path (plank, carry) stay **one still**. Custom exercises: **no dem
 
 Paint on the gray clay. Do not change pose, camera, or shorts. Keep `_character/reference.png` **unpainted**.
 
+Region IDs (C1, D1, D3, B5, …) are in **`docs/exercise-muscle-map.md`**. Chart: `content/exercises/_character/muscle-map.jpg`. When a request names IDs, paint **only those IDs**.
+
 **Color convention**
 
 | Role | Color | Opacity |
@@ -72,6 +74,8 @@ Aligns bottom to lockout, crops, writes a two-frame animated PNG.
 - This playbook
 - `content/exercises/README.md` — where files live
 - `content/exercises/_character/reference.png` — master mannequin for every new lift
+- `docs/exercise-muscle-map.md` — region IDs for painting (D3 = side / lateral delt)
+- `content/exercises/_character/muscle-map.jpg` — labeled front/back chart
 - `content/exercises/dumbbell-bench-press/` — `lockout.png`, `bottom.png`, `loop.png`
 - `content/exercises/incline-dumbbell-press/` — `lockout-plain.png`, `bottom-plain.png`, painted `lockout.png` / `bottom.png`, `loop.png`
 - App copies: `app/src/main/assets/exercises/` — `{slug}.png` (loop), `{slug}_lockout.png`, `{slug}_bottom.png` for Dumbbell bench press and Incline dumbbell press
