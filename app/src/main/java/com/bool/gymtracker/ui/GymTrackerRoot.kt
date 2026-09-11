@@ -192,14 +192,14 @@ fun GymTrackerRoot() {
             ) { entry ->
                 val id = entry.arguments?.getLong("workoutId") ?: return@composable
                 val isNew = entry.arguments?.getBoolean("new") ?: false
-                val pendingExerciseId by entry.savedStateHandle
-                    .getStateFlow("pickedExerciseId", 0L)
+                val pendingExerciseIds by entry.savedStateHandle
+                    .getStateFlow("pickedExerciseIds", longArrayOf())
                     .collectAsStateWithLifecycle()
                 EditWorkoutScreen(
                     workoutId = id,
                     isNew = isNew,
-                    pendingExerciseId = pendingExerciseId,
-                    onPendingConsumed = { entry.savedStateHandle["pickedExerciseId"] = 0L },
+                    pendingExerciseIds = pendingExerciseIds.toList(),
+                    onPendingConsumed = { entry.savedStateHandle["pickedExerciseIds"] = longArrayOf() },
                     onBack = { nav.popBackStack() },
                     onAddExercise = { ids ->
                         entry.savedStateHandle["draftExerciseIds"] = ids.toLongArray()
@@ -221,8 +221,11 @@ fun GymTrackerRoot() {
                     workoutId = id,
                     alreadyAddedIds = alreadyAdded,
                     onBack = { nav.popBackStack() },
-                    onPicked = { exerciseId ->
-                        nav.previousBackStackEntry?.savedStateHandle?.set("pickedExerciseId", exerciseId)
+                    onPicked = { exerciseIds ->
+                        nav.previousBackStackEntry?.savedStateHandle?.set(
+                            "pickedExerciseIds",
+                            exerciseIds.toLongArray(),
+                        )
                         nav.popBackStack()
                     },
                 )

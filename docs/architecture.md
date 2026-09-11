@@ -41,14 +41,14 @@ In-progress session is written on **Start**, deleted on **Cancel**, `finishedAt`
 ```
 com.bool.gymtracker
   ui/           workouts, session, history, progress, settings, theme
-  domain/       models, RestTimerState, performance (volume / coverage / advisor)
+  domain/       models, ExerciseDemos, ExerciseTargetMuscles, RestTimerState, performance (volume / coverage / advisor)
   data/local/
   data/repository/
   data/seed/    exercises (missing built-ins inserted on launch) + 4 built-in programs
   di/           AppContainer
 ```
 
-Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `lockout` / `bottom` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/`. Rules: `docs/exercise-demo-criteria.md`. Builder: `tools/make_exercise_loop.py`.
+Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `lockout` / `bottom` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/` (`{slug}_lockout.png` / `{slug}_bottom.png`, plus the APNG loop). `ExerciseDemos` maps built-in names to those assets and tip strings; Compose swaps the two stills (~700 ms). `ExerciseTargetMuscles` maps every built-in name to main and auxiliary labels for the demo screen; custom lifts fall back to the chosen primary muscle. Custom lifts are not in the demo-asset map. Rules: `docs/exercise-demo-criteria.md`. Builder: `tools/make_exercise_loop.py`.
 
 Performance stays in-process: repositories load finished sets → `domain/performance` computes small-volume, weekly Total-volume (Mon–Sun, device local), coverage vs targets, and 3-week trend messages. Coverage never writes workouts or programs. Progress shows last-week volume, shortfalls, and trend cards. No backend, no extra services.
 
@@ -68,9 +68,10 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
+- `ExerciseDemoTest` — shipped name map for Dumbbell bench press and Incline dumbbell press; unknown names have no demo; every built-in seed name has main/auxiliary targets
 - `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy one day, session keeps primary muscle if the library remaps, coverage region snapshot, weekly volume from finished working sets, finish leaves incomplete sets out of volume
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
 - `VolumeTest` — working-set small-volume, Total-volume per muscle, Mon–Sun week in local time, warm-ups / incomplete / unfinished excluded
 - `CoverageTest` — 2× sessions, set targets, Legs/Shoulders/Arms regions, unclassified skip, Other ignored, ended week only
 - `InsightsTest` — 3-week flat (±2%), rise (+10% both steps), fall (−12%), no band without three weeks of volume
-- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including Delete from Customize, copy one program day, Don't save on a new workout
+- `V1UiFlowTest` — Compose path through screens (Robolectric; no physical device), including picker checkbox + **Add selected**, Delete from Customize, copy one program day, Don't save on a new workout

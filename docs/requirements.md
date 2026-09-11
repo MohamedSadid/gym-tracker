@@ -18,6 +18,9 @@ v1 is done when you can use it for a real session without an account or internet
 - Search / filter by that same list (not Push / Pull / Core).
 - Add a custom exercise (name + primary muscle).
 - Built-in exercises are not deleted in v1.
+- **Demos (first pass):** **Dumbbell bench press** and **Incline dumbbell press** have a two-frame loop. Other built-ins show the same cards with an empty thumbnail until stills exist. Custom exercises have no demo.
+- Opened demo: large loop (or empty placeholder), then **Main** and **Auxiliary** muscles, then how-to tips. Built-ins have a main/auxiliary list; custom uses the chosen primary muscle only.
+- Picker: thumbnail; tap row opens demo; checkbox + **Add selected** (or **Add** on the demo). Program / opened-day lists: thumbnail; tap opens demo; no checkboxes.
 
 ### Workout templates
 - Create a named workout (e.g. Push A). Default name is **New workout**.
@@ -81,7 +84,7 @@ Local insights from **finished session logs** only. No backend. Warm-up sets are
 
 ## Out of scope (v1)
 
-Accounts, cloud sync, social, videos, AI coaching, wearables, nutrition, subscriptions, multi-user, RPE/drop-set types, cardio mode, supersets as a type, kg/lb toggle, light theme, onboarding tutorial.
+Accounts, cloud sync, social, how-to videos (loops/stills only), AI coaching, wearables, nutrition, subscriptions, multi-user, RPE/drop-set types, cardio mode, supersets as a type, kg/lb toggle, light theme, onboarding tutorial, in-app character/mascot for empty states or branding (v2).
 
 ## Out of scope (Performance increment)
 

@@ -201,7 +201,7 @@ class EditWorkoutViewModel(
 fun EditWorkoutScreen(
     workoutId: Long,
     isNew: Boolean,
-    pendingExerciseId: Long,
+    pendingExerciseIds: List<Long>,
     onPendingConsumed: () -> Unit,
     onBack: () -> Unit,
     onAddExercise: (List<Long>) -> Unit,
@@ -225,9 +225,9 @@ fun EditWorkoutScreen(
     var nameFocused by remember { mutableStateOf(false) }
     var nameDraft by remember { mutableStateOf("") }
 
-    LaunchedEffect(pendingExerciseId) {
-        if (pendingExerciseId > 0L) {
-            viewModel.addExercise(pendingExerciseId)
+    LaunchedEffect(pendingExerciseIds) {
+        if (pendingExerciseIds.isNotEmpty()) {
+            pendingExerciseIds.forEach { viewModel.addExercise(it) }
             onPendingConsumed()
         }
     }

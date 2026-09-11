@@ -74,6 +74,6 @@ Aligns bottom to lockout, crops, writes a two-frame animated PNG.
 - `content/exercises/_character/reference.png` — master mannequin for every new lift
 - `content/exercises/dumbbell-bench-press/` — `lockout.png`, `bottom.png`, `loop.png`
 - `content/exercises/incline-dumbbell-press/` — `lockout-plain.png`, `bottom-plain.png`, painted `lockout.png` / `bottom.png`, `loop.png`
-- App copies: `app/src/main/assets/exercises/dumbbell_bench_press.png`, `incline_dumbbell_press.png`
+- App copies: `app/src/main/assets/exercises/` — `{slug}.png` (loop), `{slug}_lockout.png`, `{slug}_bottom.png` for Dumbbell bench press and Incline dumbbell press
 
 Save new generations under `content/exercises/{slug}/` in this repo. Do not leave the only copy in Cursor’s `assets` folder.

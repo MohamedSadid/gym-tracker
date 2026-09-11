@@ -3,6 +3,7 @@ package com.bool.gymtracker.ui.workouts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -31,7 +34,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -87,15 +93,22 @@ class ExercisePickerViewModel(
         group.value = if (group.value == value) null else value
     }
 
-    fun add(exerciseId: Long, alreadyAdded: Set<Long>, onAdded: (Long) -> Unit) {
-        if (exerciseId in alreadyAdded) {
-            showAlreadyAdded()
-            return
-        }
-        onAdded(exerciseId)
+    fun add(exerciseId: Long, alreadyAdded: Set<Long>, onAdded: (List<Long>) -> Unit) {
+        addMany(listOf(exerciseId), alreadyAdded, onAdded)
     }
 
-    fun createCustom(name: String, group: MuscleGroup, alreadyAdded: Set<Long>, onAdded: (Long) -> Unit) {
+    fun addMany(exerciseIds: List<Long>, alreadyAdded: Set<Long>, onAdded: (List<Long>) -> Unit) {
+        val unique = exerciseIds.distinct()
+        val accepted = unique.filter { it !in alreadyAdded }
+        if (accepted.isEmpty()) {
+            if (unique.isNotEmpty()) showAlreadyAdded()
+            return
+        }
+        if (accepted.size < unique.size) showAlreadyAdded()
+        onAdded(accepted)
+    }
+
+    fun createCustom(name: String, group: MuscleGroup, alreadyAdded: Set<Long>, onAdded: (List<Long>) -> Unit) {
         viewModelScope.launch {
             exercises.addCustom(name, group)
                 .onSuccess { id ->
@@ -122,7 +135,7 @@ fun ExercisePickerScreen(
     workoutId: Long,
     alreadyAddedIds: List<Long>,
     onBack: () -> Unit,
-    onPicked: (Long) -> Unit,
+    onPicked: (List<Long>) -> Unit,
 ) {
     val container = LocalAppContainer.current
     val viewModel: ExercisePickerViewModel = viewModel(
@@ -137,12 +150,25 @@ fun ExercisePickerScreen(
     val selectedGroup by viewModel.selectedGroup.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
     var showCreate by remember { mutableStateOf(false) }
+    var checked by remember { mutableStateOf(setOf<Long>()) }
+    var openDemo by remember { mutableStateOf<Exercise?>(null) }
     val alreadyAdded = remember(alreadyAddedIds) { alreadyAddedIds.toSet() }
 
     LaunchedEffect(viewModel.noticeNonce) {
         if (viewModel.notice == null) return@LaunchedEffect
         delay(3_000)
         viewModel.clearNotice()
+    }
+
+    if (openDemo != null) {
+        val exercise = openDemo!!
+        ExerciseDemoScreen(
+            name = exercise.name,
+            muscleGroup = exercise.muscleGroup,
+            onBack = { openDemo = null },
+            onAdd = { viewModel.add(exercise.id, alreadyAdded, onPicked) },
+        )
+        return
     }
 
     Scaffold(
@@ -185,8 +211,20 @@ fun ExercisePickerScreen(
             }
             LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(exercises, key = { it.id }) { exercise ->
-                    ExerciseRow(exercise) { viewModel.add(exercise.id, alreadyAdded, onPicked) }
+                    ExerciseRow(
+                        exercise = exercise,
+                        checked = exercise.id in checked,
+                        onCheckedChange = { isChecked ->
+                            checked = if (isChecked) checked + exercise.id else checked - exercise.id
+                        },
+                        onOpen = { openDemo = exercise },
+                    )
                 }
+            }
+            if (checked.isNotEmpty()) {
+                PrimaryButton("Add selected", {
+                    viewModel.addMany(checked.toList(), alreadyAdded, onPicked)
+                })
             }
             PrimaryButton("Create custom", { showCreate = true })
         }
@@ -210,10 +248,32 @@ private fun groupChipColors() = FilterChipDefaults.filterChipColors(
 )
 
 @Composable
-private fun ExerciseRow(exercise: Exercise, onClick: () -> Unit) {
-    GymCard(Modifier.fillMaxWidth().clickable(onClick = onClick)) {
-        Text(exercise.name, style = MaterialTheme.typography.titleMedium)
-        Text(exercise.muscleGroup.label, color = GymMuted)
+private fun ExerciseRow(
+    exercise: Exercise,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    onOpen: () -> Unit,
+) {
+    GymCard(Modifier.fillMaxWidth()) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier.weight(1f).clickable(onClick = onOpen),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                ExerciseDemoThumbnail(exercise.name)
+                Column(Modifier.weight(1f)) {
+                    Text(exercise.name, style = MaterialTheme.typography.titleMedium)
+                    Text(exercise.muscleGroup.label, color = GymMuted)
+                }
+            }
+            Checkbox(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier.semantics { contentDescription = "Select ${exercise.name}" },
+                colors = CheckboxDefaults.colors(checkedColor = GymLime, checkmarkColor = GymBlack),
+            )
+        }
     }
 }
 

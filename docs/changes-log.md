@@ -10,6 +10,10 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Exercise demo: larger full-width PNG; how-to and main/auxiliary muscles under it. `ExerciseDemoScreen`, `ExerciseTargetMuscles`.
+
+- [x] Animation integration: picker/program-day thumbnails; tap opens loop + tips; picker checkbox + Add selected. First pass: Dumbbell bench press and Incline dumbbell press. `ExerciseDemos`, `ExerciseDemoScreen`, `ExercisePickerScreen`, `ProgramDayScreen`.
+
 - [x] Built-in library: 25 extra lifts (coverage holes + StrengthLog/BurnFit staples). Missing names insert on launch. `ExerciseSeed`, `AppDatabase.seedIfNeeded`.
 
 - [x] Progress: last-week Total-volume, 3-week flat / rise / fall cards. `Insights.kt`, `ProgressScreen`.

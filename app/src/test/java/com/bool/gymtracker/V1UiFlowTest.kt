@@ -62,18 +62,21 @@ class V1UiFlowTest {
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Barbell bench press").fetchSemanticsNodes().isNotEmpty()
         }
-        compose.onNodeWithText("Barbell bench press").performClick()
+        compose.onNodeWithContentDescription("Select Barbell bench press").performClick()
+        compose.onNodeWithText("Add selected").performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Edit workout").fetchSemanticsNodes().isNotEmpty() &&
                 compose.onAllNodesWithText("Barbell bench press").fetchSemanticsNodes().isNotEmpty()
         }
         assertEquals(0, compose.onAllNodesWithText("Start").fetchSemanticsNodes().size)
         compose.onNodeWithText("Save").performClick()
+        compose.waitForIdle()
         compose.onNodeWithContentDescription("Back").performClick()
         compose.waitUntil(5_000) {
-            compose.onAllNodesWithText("New workout").fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithText("Customize").fetchSemanticsNodes().isNotEmpty() &&
+                compose.onAllNodesWithText("Delete").fetchSemanticsNodes().isNotEmpty()
         }
-        compose.onNodeWithText("New workout").performClick()
+        compose.onNodeWithText("1 exercise").performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("Start").fetchSemanticsNodes().isNotEmpty()
         }

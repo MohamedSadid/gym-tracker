@@ -8,6 +8,6 @@ All stills, loops, the character reference, and the loop builder live **in this 
 | `tools/make_exercise_loop.py` | Align two stills → animated PNG |
 | `content/exercises/_character/reference.png` | Master mannequin (use this as the look for every new lift) |
 | `content/exercises/{slug}/` | `lockout.png`, `bottom.png`, `loop.png` |
-| `app/src/main/assets/exercises/` | Same loops for the Android app (`{slug}.png`) |
+| `app/src/main/assets/exercises/` | App copies: `{slug}.png` (loop), `{slug}_lockout.png`, `{slug}_bottom.png` |
 
 When generating a new lift: start from `_character/reference.png`, save stills under `content/exercises/{slug}/`, then run `make_exercise_loop.py` into that folder and copy `loop.png` to `app/src/main/assets/exercises/`.

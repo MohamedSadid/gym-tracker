@@ -14,7 +14,6 @@ Mark a box `[x]` when that item is done.
 - [ ] First git commit of the project (only when you ask — or you do it yourself)
 - [ ] Enhance in-app animation (screen transitions and session UI)
 - [x] Extend the built-in exercise library (more lifts, including forearm extensors and better region coverage)
-- [ ] Find a way to show how-to videos for exercises
 
 ### Performance engine (do in order)
 
@@ -34,6 +33,30 @@ Mark a box `[x]` when that item is done.
 - [ ] Backup / cloud sync
 - [ ] Accounts
 - [ ] Rest timer still firing if the app is fully killed
+- [ ] App character for empty states / branding (separate from exercise how-to stills)
+
+### Exercise demos (remaining lifts)
+
+- [ ] Complete lockout / bottom / loop stills with primary/auxiliary color coding for every remaining built-in exercise (`docs/exercise-demo-criteria.md`)
+
+### Animation integration
+
+Integrate exercise characters/loops in the app (built-in lifts only; custom exercises stay without a demo).
+
+**First pass:** only **Dumbbell bench press** and **Incline dumbbell press** have loops. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
+
+**Customize (exercise picker)**
+
+- [x] Show an animation thumbnail on each exercise while picking
+- [x] Tap the exercise card to open a detail view with the animation
+- [x] Show how-to tips and main/auxiliary muscles under the animation on that detail view
+- [x] Add a checkbox on each exercise so the user can select several and add them without opening the card
+
+**Fixed programs**
+
+- [x] Show an animation thumbnail on every exercise (user does not pick exercises here)
+- [x] Tap the exercise card to open a detail view with the animation
+- [x] Show how-to tips and main/auxiliary muscles under the animation on that detail view
 
 ## Already done
 

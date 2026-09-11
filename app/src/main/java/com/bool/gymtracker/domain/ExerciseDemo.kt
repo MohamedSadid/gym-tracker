@@ -1,0 +1,32 @@
+package com.bool.gymtracker.domain
+
+data class ExerciseDemo(
+    val lockoutAsset: String,
+    val bottomAsset: String,
+    val tips: List<String>,
+)
+
+object ExerciseDemos {
+    private val byName = mapOf(
+        "Dumbbell bench press" to ExerciseDemo(
+            lockoutAsset = "exercises/dumbbell_bench_press_lockout.png",
+            bottomAsset = "exercises/dumbbell_bench_press_bottom.png",
+            tips = listOf(
+                "Lie on a flat bench, feet on the floor, dumbbells over the chest.",
+                "Lower until the bells are beside the chest, elbows about 45° from the torso.",
+                "Press to lockout; do not bang the dumbbells together.",
+            ),
+        ),
+        "Incline dumbbell press" to ExerciseDemo(
+            lockoutAsset = "exercises/incline_dumbbell_press_lockout.png",
+            bottomAsset = "exercises/incline_dumbbell_press_bottom.png",
+            tips = listOf(
+                "Set a moderate incline. Dumbbells start over the upper chest.",
+                "Lower to the upper chest with wrists stacked over the elbows.",
+                "Press to lockout without flaring the elbows wide.",
+            ),
+        ),
+    )
+
+    fun forName(name: String): ExerciseDemo? = byName[name]
+}

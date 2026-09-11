@@ -3,6 +3,7 @@ package com.bool.gymtracker.ui.workouts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -32,6 +37,7 @@ import com.bool.gymtracker.data.repository.WorkoutRepository
 import com.bool.gymtracker.data.seed.ProgramSeed
 import com.bool.gymtracker.di.LocalAppContainer
 import com.bool.gymtracker.domain.BuiltInProgram
+import com.bool.gymtracker.domain.WorkoutExerciseItem
 import com.bool.gymtracker.domain.WorkoutSummary
 import com.bool.gymtracker.ui.components.GymCard
 import com.bool.gymtracker.ui.components.PrimaryButton
@@ -214,6 +220,16 @@ fun ProgramDayScreen(
         },
     )
     val detail by viewModel.detail.collectAsStateWithLifecycle()
+    var openDemo by remember { mutableStateOf<WorkoutExerciseItem?>(null) }
+    if (openDemo != null) {
+        val item = openDemo!!
+        ExerciseDemoScreen(
+            name = item.name,
+            muscleGroup = item.muscleGroup,
+            onBack = { openDemo = null },
+        )
+        return
+    }
     Scaffold(
         containerColor = GymBlack,
         topBar = {
@@ -234,9 +250,17 @@ fun ProgramDayScreen(
         ) {
             LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(detail?.exercises.orEmpty(), key = { it.exerciseId }) { item ->
-                    GymCard(Modifier.fillMaxWidth()) {
-                        Text(item.name, style = MaterialTheme.typography.titleMedium)
-                        Text(item.muscleGroup.label, color = GymMuted)
+                    GymCard(Modifier.fillMaxWidth().clickable { openDemo = item }) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            ExerciseDemoThumbnail(item.name)
+                            Column {
+                                Text(item.name, style = MaterialTheme.typography.titleMedium)
+                                Text(item.muscleGroup.label, color = GymMuted)
+                            }
+                        }
                     }
                 }
             }
