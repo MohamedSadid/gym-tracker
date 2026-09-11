@@ -28,12 +28,36 @@ Playback: **lockout ↔ bottom**, looping (~700 ms each). File: `{slug}-loop.png
 
 Holds with no path (plank, carry) stay **one still**. Custom exercises: **no demo**.
 
+## Muscle highlights
+
+Paint on the gray clay. Do not change pose, camera, or shorts. Keep `_character/reference.png` **unpainted**.
+
+**Color convention**
+
+| Role | Color | Opacity |
+|------|--------|---------|
+| **Primary** (main working muscles) | Solid lime `#B8F000` | **High** — almost opaque (~90%). Must read clearly against gray clay. |
+| **Auxiliary** (helpers) | Same hue, paler `#D4E88A` | **Low** — see-through wash (~40%) so it never matches primary. |
+| Other muscles | Gray clay | None |
+
+Paint **only** the muscles in the table. Abs, obliques, biceps, forearms, hips, and legs stay gray clay. Do not flood the whole arm or whole torso.
+
+**Muscle focus (per lift)**
+
+| Lift | Primary | Auxiliary |
+|------|---------|-----------|
+| Flat dumbbell bench press | Chest, front delts | Triceps |
+| Incline dumbbell press | Chest, front delts | Triceps |
+
+Add a row here when a new lift is painted.
+
 ## Reject
 
 - Different body, face, or shorts color/cut between frames or lifts
 - Zoom or angle jump after align
 - Wrong equipment (e.g. incline bench for flat DB press)
 - One arm lockout while the other is at the chest
+- Primary and auxiliary highlights the same opacity or brightness
 
 ## Build the loop
 
@@ -49,7 +73,7 @@ Aligns bottom to lockout, crops, writes a two-frame animated PNG.
 - `content/exercises/README.md` — where files live
 - `content/exercises/_character/reference.png` — master mannequin for every new lift
 - `content/exercises/dumbbell-bench-press/` — `lockout.png`, `bottom.png`, `loop.png`
-- `content/exercises/incline-dumbbell-press/` — `lockout.png`, `bottom.png`, `loop.png`
+- `content/exercises/incline-dumbbell-press/` — `lockout-plain.png`, `bottom-plain.png`, painted `lockout.png` / `bottom.png`, `loop.png`
 - App copies: `app/src/main/assets/exercises/dumbbell_bench_press.png`, `incline_dumbbell_press.png`
 
 Save new generations under `content/exercises/{slug}/` in this repo. Do not leave the only copy in Cursor’s `assets` folder.
