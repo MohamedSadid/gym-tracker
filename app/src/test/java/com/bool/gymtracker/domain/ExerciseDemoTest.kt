@@ -10,17 +10,19 @@ class ExerciseDemoTest {
     @Test
     fun mapsTheShippedLifts() {
         val names = listOf(
-            "Barbell bench press" to "exercises/barbell_bench_press_lockout.png",
-            "Dumbbell bench press" to "exercises/dumbbell_bench_press_lockout.png",
-            "Smith bench press" to "exercises/smith_bench_press_lockout.png",
-            "Incline barbell press" to "exercises/incline_barbell_press_lockout.png",
-            "Incline Smith bench press" to "exercises/incline_smith_bench_press_lockout.png",
-            "Incline dumbbell press" to "exercises/incline_dumbbell_press_lockout.png",
-            "Pec deck fly" to "exercises/pec_deck_fly_lockout.png",
+            "Barbell bench press" to "exercises/barbell_bench_press_position_2.png",
+            "Dumbbell bench press" to "exercises/dumbbell_bench_press_position_2.png",
+            "Smith bench press" to "exercises/smith_bench_press_position_2.png",
+            "Incline barbell press" to "exercises/incline_barbell_press_position_2.png",
+            "Incline Smith bench press" to "exercises/incline_smith_bench_press_position_2.png",
+            "Incline dumbbell press" to "exercises/incline_dumbbell_press_position_2.png",
+            "Pec deck fly" to "exercises/pec_deck_fly_position_2.png",
+            "Cable fly" to "exercises/cable_fly_position_2.png",
+            "Chest press machine" to "exercises/chest_press_machine_position_2.png",
         )
-        names.forEach { (name, lockout) ->
+        names.forEach { (name, position2) ->
             val demo = ExerciseDemos.forName(name)!!
-            assertEquals(lockout, demo.lockoutAsset)
+            assertEquals(position2, demo.position2Asset)
             assertEquals(3, demo.tips.size)
         }
     }

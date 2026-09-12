@@ -10,6 +10,22 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Chest press machine two-frame loop from position 1 + position 2. `content/exercises/chest-press-machine/loop.png` and `app/src/main/assets/exercises/chest_press_machine.png`.
+
+- [x] Chest press machine: position 1 then duplicate for position 2 (90° seat; P2 arms fully straight at chest; same lighting, no darker overlay). `content/exercises/chest-press-machine/`, `ExerciseDemos`. No loop.
+
+- [x] Demo stills: position 2 must match position 1 lighting/shadows exactly — no darker overlay or exposure shift. `docs/exercise-demo-criteria.md`, `.cursor/rules/exercise-demo.mdc`.
+
+- [x] Cable fly two-frame loop from position 1 + position 2. `content/exercises/cable-fly/loop.png` and `app/src/main/assets/exercises/cable_fly.png`.
+
+- [x] Demo stills: frames named **position 1** / **position 2** (was bottom/lockout). `content/exercises/{slug}/position-1.png` + `position-2.png`; app `{slug}_position_1.png` / `{slug}_position_2.png`; `ExerciseDemo` fields; loop script `--position-1` / `--position-2`.
+
+- [x] Demo stills: generate **position 1** first, duplicate, change only the moving body part for **position 2**. Written into `docs/exercise-demo-criteria.md` and `.cursor/rules/exercise-demo.mdc`.
+
+- [x] Cable fly: two unpainted stills (position 1 arms open, position 2 hands together) on a dual-cable machine. Same character. No loop. `content/exercises/cable-fly/`, `ExerciseDemos`.
+
+## Done
+
 - [x] Chest animation integration: all seven finished chest demos in picker/demo screen; app assets recopy unpainted stills + rebuilt loops. `ExerciseDemos`, `app/src/main/assets/exercises/`.
 
 - [x] Barbell bench press and Incline barbell press two-frame loops. `content/exercises/barbell-bench-press/loop.png`, `content/exercises/incline-barbell-press/loop.png`, and matching `app/src/main/assets/exercises/` copies.

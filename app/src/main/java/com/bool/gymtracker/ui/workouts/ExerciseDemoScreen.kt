@@ -59,8 +59,8 @@ fun loadAssetBitmap(path: String, context: android.content.Context): Bitmap? =
 fun ExerciseDemoThumbnail(name: String, modifier: Modifier = Modifier) {
     val demo = ExerciseDemos.forName(name)
     val context = LocalContext.current
-    val bitmap = remember(demo?.lockoutAsset) {
-        demo?.let { loadAssetBitmap(it.lockoutAsset, context) }
+    val bitmap = remember(demo?.position2Asset) {
+        demo?.let { loadAssetBitmap(it.position2Asset, context) }
     }
     Box(
         modifier = modifier
@@ -83,17 +83,17 @@ fun ExerciseDemoThumbnail(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun ExerciseDemoLoop(demo: ExerciseDemo, modifier: Modifier = Modifier, contentDescription: String) {
     val context = LocalContext.current
-    val lockout = remember(demo.lockoutAsset) { loadAssetBitmap(demo.lockoutAsset, context) }
-    val bottom = remember(demo.bottomAsset) { loadAssetBitmap(demo.bottomAsset, context) }
-    var showLockout by remember(demo) { mutableStateOf(true) }
+    val position1 = remember(demo.position1Asset) { loadAssetBitmap(demo.position1Asset, context) }
+    val position2 = remember(demo.position2Asset) { loadAssetBitmap(demo.position2Asset, context) }
+    var showPosition2 by remember(demo) { mutableStateOf(true) }
     LaunchedEffect(demo) {
-        if (lockout == null || bottom == null) return@LaunchedEffect
+        if (position1 == null || position2 == null) return@LaunchedEffect
         while (true) {
             delay(FrameMs)
-            showLockout = !showLockout
+            showPosition2 = !showPosition2
         }
     }
-    val frame = if (showLockout) lockout else bottom
+    val frame = if (showPosition2) position2 else position1
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))

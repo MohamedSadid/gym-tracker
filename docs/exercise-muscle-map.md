@@ -2,7 +2,7 @@
 
 Use this atlas for muscle IDs (C1, D1, B5, …). Visual source: `content/exercises/_character/muscle-map.jpg`.
 
-Lift stills and loops are **unpainted** for now. Do not paint lime on lockout, bottom, or loop frames. Demo **Main** / **Auxiliary** text still comes from `ExerciseTargetMuscles`.
+Lift stills and loops are **unpainted** for now. Do not paint lime on position 1, position 2, or loop frames. Demo **Main** / **Auxiliary** text still comes from `ExerciseTargetMuscles`.
 
 ## Letter prefixes
 

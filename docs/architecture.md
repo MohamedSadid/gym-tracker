@@ -48,7 +48,7 @@ com.bool.gymtracker
   di/           AppContainer
 ```
 
-Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `lockout` / `bottom` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/` (`{slug}_lockout.png` / `{slug}_bottom.png`, plus the APNG loop). `ExerciseDemos` maps built-in names to those assets and tip strings; Compose swaps the two stills (~700 ms). `ExerciseTargetMuscles` maps every built-in name to main and auxiliary labels for the demo screen; custom lifts fall back to the chosen primary muscle. Custom lifts are not in the demo-asset map. Rules: `docs/exercise-demo-criteria.md`. Stills are unpainted; region IDs in `docs/exercise-muscle-map.md` are parked. Builder: `tools/make_exercise_loop.py`.
+Exercise how-to stills and loops live in the repo under `content/exercises/` (character reference + per-lift `position-1` / `position-2` / `loop` PNGs). The Android copies are `app/src/main/assets/exercises/` (`{slug}_position_1.png` / `{slug}_position_2.png`, plus the APNG loop). `ExerciseDemos` maps built-in names to those assets and tip strings; Compose swaps the two stills (~700 ms). `ExerciseTargetMuscles` maps every built-in name to main and auxiliary labels for the demo screen; custom lifts fall back to the chosen primary muscle. Custom lifts are not in the demo-asset map. Rules: `docs/exercise-demo-criteria.md`. Stills are unpainted; region IDs in `docs/exercise-muscle-map.md` are parked. Builder: `tools/make_exercise_loop.py`.
 
 Performance stays in-process: repositories load finished sets → `domain/performance` computes small-volume, weekly Total-volume (Mon–Sun, device local), coverage vs targets, and 3-week trend messages. Coverage never writes workouts or programs. Progress shows last-week volume, shortfalls, and trend cards. No backend, no extra services.
 
@@ -68,7 +68,7 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
-- `ExerciseDemoTest` — shipped name map for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, Incline dumbbell press, and Pec deck fly; unknown names have no demo; every built-in seed name has main/auxiliary targets
+- `ExerciseDemoTest` — shipped name map for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, Incline dumbbell press, Pec deck fly, Cable fly, and Chest press machine; unknown names have no demo; every built-in seed name has main/auxiliary targets
 - `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy one day, session keeps primary muscle if the library remaps, coverage region snapshot, weekly volume from finished working sets, finish leaves incomplete sets out of volume
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
 - `VolumeTest` — working-set small-volume, Total-volume per muscle, Mon–Sun week in local time, warm-ups / incomplete / unfinished excluded

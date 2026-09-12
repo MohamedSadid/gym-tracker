@@ -42,15 +42,15 @@ def to_pil(bgr):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--lockout", required=True)
-    parser.add_argument("--bottom", required=True)
+    parser.add_argument("--position-1", required=True)
+    parser.add_argument("--position-2", required=True)
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
 
-    lockout = cv2.imread(args.lockout)
-    bottom = align_to(lockout, cv2.imread(args.bottom))
-    lockout, bottom = crop(lockout), crop(bottom)
-    frames = [to_pil(lockout), to_pil(bottom)]
+    position1 = cv2.imread(args.position_1)
+    position2 = align_to(position1, cv2.imread(args.position_2))
+    position1, position2 = crop(position1), crop(position2)
+    frames = [to_pil(position1), to_pil(position2)]
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     frames[0].save(

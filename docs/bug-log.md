@@ -10,6 +10,32 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Fixed
 
+- [x] Chest press position 2: lever arms sit too high. Expected handles on the red lines (about head height), elbows fully straight. Lowered the lever travel. `content/exercises/chest-press-machine/position-2.png`.
+
+- [x] Chest press position 2: lever arms stay down. Expected the machine axis to lift up (red guide lines) as the elbows fully extend. Levers rotate up; elbows locked. `content/exercises/chest-press-machine/position-2.png`.
+
+- [x] Chest press position 2: arms raised to head height. Expected elbows fully extended forward like the Panatta chest-press photo. Regenerated from position 1. `content/exercises/chest-press-machine/position-2.png`.
+
+- [x] Chest press position 1: handles are vertical. Expected both handles horizontal, mannequin holding both. Horizontal grips in both hands. `content/exercises/chest-press-machine/position-1.png`.
+
+- [x] Chest press position 1: mannequin is not holding the handles. Expected both hands gripping the press handles. Hands now wrap the vertical grips. `content/exercises/chest-press-machine/position-1.png`.
+
+- [x] Chest press stills were removed as wrong. Recreate position 1 only: seated on the vertical chest press, holding the press handles. Fresh position 1 still. `content/exercises/chest-press-machine/position-1.png`.
+
+- [x] Chest press: current 90° still is the opposite pose. It should be position 2; position 1 is elbows contracted down. Copied 90° still to position 2; new position 1 has elbows down. `content/exercises/chest-press-machine/`.
+
+- [x] Chest press position 1: elbows not bent enough. Expected a 90° elbow angle on the lower handles. Elbows pulled in to 90°. `content/exercises/chest-press-machine/position-1.png`.
+
+- [x] Chest press position 1: mannequin holds the tall upper posts. Expected sitting and gripping the lower press handles. Regenerated on the locked machine. `content/exercises/chest-press-machine/position-1.png`.
+
+- [x] Chest press empty machine: selected plates are floating mid-rod. Expected the whole stack sitting fully down on the base. Stack parked at the bottom. `content/exercises/chest-press-machine/machine.png`.
+
+- [x] Chest press machine stills are a pec deck (arms out to the sides). Expected the seated lever chest press from the two references: P1 handles at chest, P2 press forward. Regenerated from the new refs. `content/exercises/chest-press-machine/`.
+
+- [x] Cable fly position 2: elbows bent and D-handles stuck on the elbows. Expected arms fully straight in front at mid-chest, hands gripping the handles. Regenerated position 2 from position 1. `content/exercises/cable-fly/position-2.png`.
+
+- [x] Cable fly: mannequin sits on a flat bench. Expected a 90° upright seat back. Regenerated both stills on an L-shaped 90° seat. `content/exercises/cable-fly/`.
+
 - [x] Pec deck fly lockout is a copy of the bottom still; only arms/handles change (together in front of the chest, elbows straight). Stack and camera unchanged. `content/exercises/pec-deck-fly/lockout.png`.
 
 - [x] Pec deck fly lockout floor shadow was darker than the bottom still. Matched the even studio lighting. Pose, lifted stack, and guide rods kept. `content/exercises/pec-deck-fly/lockout.png`.
