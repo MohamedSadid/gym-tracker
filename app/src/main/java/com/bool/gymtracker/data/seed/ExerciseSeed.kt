@@ -9,6 +9,7 @@ object ExerciseSeed {
         lift("Barbell bench press", MuscleGroup.CHEST),
         lift("Smith bench press", MuscleGroup.CHEST),
         lift("Incline barbell press", MuscleGroup.CHEST),
+        lift("Incline Smith bench press", MuscleGroup.CHEST),
         lift("Incline dumbbell press", MuscleGroup.CHEST),
         lift("Dumbbell bench press", MuscleGroup.CHEST),
         lift("Chest press machine", MuscleGroup.CHEST),

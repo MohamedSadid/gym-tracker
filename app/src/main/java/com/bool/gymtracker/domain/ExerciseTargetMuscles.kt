@@ -10,6 +10,7 @@ object ExerciseTargetMuscles {
         "Barbell bench press" to targets("Chest, front delts", "Triceps"),
         "Smith bench press" to targets("Chest, front delts", "Triceps"),
         "Incline barbell press" to targets("Chest, front delts", "Triceps"),
+        "Incline Smith bench press" to targets("Chest, front delts", "Triceps"),
         "Incline dumbbell press" to targets("Chest, front delts", "Triceps"),
         "Dumbbell bench press" to targets("Chest, front delts", "Triceps"),
         "Chest press machine" to targets("Chest", "Front delts, triceps"),

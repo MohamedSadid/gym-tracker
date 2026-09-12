@@ -43,7 +43,7 @@ Mark a box `[x]` when that item is done.
 
 Integrate exercise characters/loops in the app (built-in lifts only; custom exercises stay without a demo).
 
-**First pass:** **Barbell bench press**, **Dumbbell bench press**, **Smith bench press**, **Incline barbell press**, and **Incline dumbbell press** have demos. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
+**First pass:** **Barbell bench press**, **Dumbbell bench press**, **Smith bench press**, **Incline barbell press**, **Incline Smith bench press**, and **Incline dumbbell press** have demos. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
 
 **Customize (exercise picker)**
 

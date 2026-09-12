@@ -68,7 +68,7 @@ Empty app → templates + exercises → session logging → rest timer → histo
 
 ## Tests
 
-- `ExerciseDemoTest` — shipped name map for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, and Incline dumbbell press; unknown names have no demo; every built-in seed name has main/auxiliary targets
+- `ExerciseDemoTest` — shipped name map for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, and Incline dumbbell press; unknown names have no demo; every built-in seed name has main/auxiliary targets
 - `V1WorkoutFlowTest` — create workout, log set, finish, history, progression, cancel, duplicate custom name, rename blank keeps name, add/remove set, reject duplicate workout exercise, new session always one set, delete template keeps history, built-in program locked + copy one day, session keeps primary muscle if the library remaps, coverage region snapshot, weekly volume from finished working sets, finish leaves incomplete sets out of volume
 - `RestTimerStateTest` — countdown, pause/resume/skip, +15s
 - `VolumeTest` — working-set small-volume, Total-volume per muscle, Mon–Sun week in local time, warm-ups / incomplete / unfinished excluded

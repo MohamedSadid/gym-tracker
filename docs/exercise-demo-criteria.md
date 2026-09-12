@@ -78,7 +78,8 @@ Aligns bottom to lockout, crops, writes a two-frame animated PNG.
 - `content/exercises/dumbbell-bench-press/` — unpainted `lockout.png`, `bottom.png`, `loop.png`
 - `content/exercises/incline-barbell-press/` — unpainted `lockout.png`, `bottom.png` (no loop yet)
 - `content/exercises/smith-bench-press/` — unpainted `lockout.png`, `bottom.png` (no loop yet)
+- `content/exercises/incline-smith-bench-press/` — unpainted `lockout.png`, `bottom.png` (no loop yet)
 - `content/exercises/incline-dumbbell-press/` — unpainted `lockout.png`, `bottom.png`, `loop.png`
-- App copies: `app/src/main/assets/exercises/` — `{slug}_lockout.png`, `{slug}_bottom.png` (and `{slug}.png` loop when it exists) for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, and Incline dumbbell press
+- App copies: `app/src/main/assets/exercises/` — `{slug}_lockout.png`, `{slug}_bottom.png` (and `{slug}.png` loop when it exists) for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, and Incline dumbbell press
 
 Save new generations under `content/exercises/{slug}/` in this repo (`lockout.png` and `bottom.png` only until loops are requested). Do not leave the only copy in Cursor’s `assets` folder.

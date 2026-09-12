@@ -44,6 +44,15 @@ object ExerciseDemos {
                 "Press to lockout with elbows fully straight; do not bounce the bar.",
             ),
         ),
+        "Incline Smith bench press" to ExerciseDemo(
+            lockoutAsset = "exercises/incline_smith_bench_press_lockout.png",
+            bottomAsset = "exercises/incline_smith_bench_press_bottom.png",
+            tips = listOf(
+                "Set a moderate incline inside the Smith machine, bar over mid-chest.",
+                "Unrack, then lower the guided bar until it touches mid-chest, elbows about 45°.",
+                "Press to lockout along the rails; do not bounce the bar.",
+            ),
+        ),
         "Incline dumbbell press" to ExerciseDemo(
             lockoutAsset = "exercises/incline_dumbbell_press_lockout.png",
             bottomAsset = "exercises/incline_dumbbell_press_bottom.png",
