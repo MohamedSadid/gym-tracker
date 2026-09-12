@@ -10,6 +10,14 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Chest animation integration: all seven finished chest demos in picker/demo screen; app assets recopy unpainted stills + rebuilt loops. `ExerciseDemos`, `app/src/main/assets/exercises/`.
+
+- [x] Barbell bench press and Incline barbell press two-frame loops. `content/exercises/barbell-bench-press/loop.png`, `content/exercises/incline-barbell-press/loop.png`, and matching `app/src/main/assets/exercises/` copies.
+
+- [x] Smith bench press and Incline Smith bench press two-frame loops. `content/exercises/smith-bench-press/loop.png`, `content/exercises/incline-smith-bench-press/loop.png`, and matching `app/src/main/assets/exercises/` copies.
+
+- [x] Pec deck fly two-frame loop from lockout + bottom. `content/exercises/pec-deck-fly/loop.png` and `app/src/main/assets/exercises/pec_deck_fly.png`.
+
 - [x] Pec deck fly lockout: 4–5 plates rise to shoulder height; remaining plates stay on the base. Pose unchanged. `content/exercises/pec-deck-fly/lockout.png`.
 
 - [x] Pec deck fly lockout: stack rises a small amount (short gap under the plates). Pose matches the bottom still. `content/exercises/pec-deck-fly/lockout.png`.

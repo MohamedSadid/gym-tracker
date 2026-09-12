@@ -37,13 +37,35 @@ Mark a box `[x]` when that item is done.
 
 ### Exercise demos (remaining lifts)
 
-- [ ] Two stills per lift (`lockout` + `bottom`) for remaining built-ins (`docs/exercise-demo-criteria.md`). Chest barbell/Smith presses: bar on mid-chest at bottom, elbows ~45°; lockout with straight elbows. No loops until asked. Stills stay unpainted.
+Two stills per lift (`lockout` + `bottom`); loop when asked. Stills stay unpainted (`docs/exercise-demo-criteria.md`).
+
+- [ ] **Chest**
+  - [x] Barbell bench press (stills + loop)
+  - [x] Dumbbell bench press (stills + loop)
+  - [x] Incline barbell press (stills + loop)
+  - [x] Incline dumbbell press (stills + loop)
+  - [x] Smith bench press (stills + loop)
+  - [x] Incline Smith bench press (stills + loop)
+  - [x] Pec deck fly (stills + loop)
+  - [ ] Chest press machine
+  - [ ] Dips
+  - [ ] Push-up
+  - [ ] Chest fly
+  - [ ] Cable fly
+- [ ] **Back**
+- [ ] **Shoulders**
+- [ ] **Arms**
+- [ ] **Legs**
+- [ ] **Abs**
+- [ ] **Other**
 
 ### Animation integration
 
 Integrate exercise characters/loops in the app (built-in lifts only; custom exercises stay without a demo).
 
-**First pass:** **Barbell bench press**, **Dumbbell bench press**, **Smith bench press**, **Incline barbell press**, **Incline Smith bench press**, **Incline dumbbell press**, and **Pec deck fly** have demos. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
+- [x] **Chest:** all finished demos in the app (Barbell bench press, Dumbbell bench press, Incline barbell press, Incline dumbbell press, Smith bench press, Incline Smith bench press, Pec deck fly). Unpainted stills + two-frame loops; picker/program-day thumbnail and demo screen.
+
+**Remaining muscles:** other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
 
 **Customize (exercise picker)**
 

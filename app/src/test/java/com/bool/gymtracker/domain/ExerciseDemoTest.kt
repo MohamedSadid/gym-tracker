@@ -9,33 +9,20 @@ import org.junit.Test
 class ExerciseDemoTest {
     @Test
     fun mapsTheShippedLifts() {
-        val barbell = ExerciseDemos.forName("Barbell bench press")!!
-        assertEquals("exercises/barbell_bench_press_lockout.png", barbell.lockoutAsset)
-        assertEquals(3, barbell.tips.size)
-
-        val bench = ExerciseDemos.forName("Dumbbell bench press")!!
-        assertEquals("exercises/dumbbell_bench_press_lockout.png", bench.lockoutAsset)
-        assertEquals(3, bench.tips.size)
-
-        val smith = ExerciseDemos.forName("Smith bench press")!!
-        assertEquals("exercises/smith_bench_press_lockout.png", smith.lockoutAsset)
-        assertEquals(3, smith.tips.size)
-
-        val inclineBarbell = ExerciseDemos.forName("Incline barbell press")!!
-        assertEquals("exercises/incline_barbell_press_lockout.png", inclineBarbell.lockoutAsset)
-        assertEquals(3, inclineBarbell.tips.size)
-
-        val inclineSmith = ExerciseDemos.forName("Incline Smith bench press")!!
-        assertEquals("exercises/incline_smith_bench_press_lockout.png", inclineSmith.lockoutAsset)
-        assertEquals(3, inclineSmith.tips.size)
-
-        val incline = ExerciseDemos.forName("Incline dumbbell press")!!
-        assertEquals("exercises/incline_dumbbell_press_bottom.png", incline.bottomAsset)
-        assertEquals(3, incline.tips.size)
-
-        val pecDeck = ExerciseDemos.forName("Pec deck fly")!!
-        assertEquals("exercises/pec_deck_fly_lockout.png", pecDeck.lockoutAsset)
-        assertEquals(3, pecDeck.tips.size)
+        val names = listOf(
+            "Barbell bench press" to "exercises/barbell_bench_press_lockout.png",
+            "Dumbbell bench press" to "exercises/dumbbell_bench_press_lockout.png",
+            "Smith bench press" to "exercises/smith_bench_press_lockout.png",
+            "Incline barbell press" to "exercises/incline_barbell_press_lockout.png",
+            "Incline Smith bench press" to "exercises/incline_smith_bench_press_lockout.png",
+            "Incline dumbbell press" to "exercises/incline_dumbbell_press_lockout.png",
+            "Pec deck fly" to "exercises/pec_deck_fly_lockout.png",
+        )
+        names.forEach { (name, lockout) ->
+            val demo = ExerciseDemos.forName(name)!!
+            assertEquals(lockout, demo.lockoutAsset)
+            assertEquals(3, demo.tips.size)
+        }
     }
 
     @Test
