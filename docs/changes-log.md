@@ -10,6 +10,8 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Smith bench press: new built-in + lockout/bottom stills on a Smith machine (rails, not a free bar). Same camera/lighting; bottom bar on chest. No loop. `ExerciseSeed`, `ExerciseDemos`, `content/exercises/smith-bench-press/`.
+
 - [x] Incline barbell press: new built-in + lockout/bottom stills (bar on chest, elbows ~45° / lockout straight). No loop. `ExerciseSeed`, `ExerciseDemos`, `content/exercises/incline-barbell-press/`.
 
 - [x] Exercise demo criteria: chest barbell/Smith presses (flat + incline) use stretch (bar on mid-chest, elbows ~45°) and lockout (elbows fully straight). Two stills only for now; no loop until asked. `docs/exercise-demo-criteria.md`.

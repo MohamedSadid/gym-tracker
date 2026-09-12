@@ -26,6 +26,15 @@ object ExerciseDemos {
                 "Press to lockout; do not bang the dumbbells together.",
             ),
         ),
+        "Smith bench press" to ExerciseDemo(
+            lockoutAsset = "exercises/smith_bench_press_lockout.png",
+            bottomAsset = "exercises/smith_bench_press_bottom.png",
+            tips = listOf(
+                "Lie on a flat bench inside the Smith machine, bar over mid-chest.",
+                "Unrack, then lower the guided bar until it touches the chest, elbows about 45°.",
+                "Press to lockout along the rails; do not bounce the bar.",
+            ),
+        ),
         "Incline barbell press" to ExerciseDemo(
             lockoutAsset = "exercises/incline_barbell_press_lockout.png",
             bottomAsset = "exercises/incline_barbell_press_bottom.png",

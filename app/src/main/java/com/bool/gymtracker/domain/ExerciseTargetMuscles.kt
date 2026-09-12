@@ -8,6 +8,7 @@ data class ExerciseTargets(
 object ExerciseTargetMuscles {
     private val byName = mapOf(
         "Barbell bench press" to targets("Chest, front delts", "Triceps"),
+        "Smith bench press" to targets("Chest, front delts", "Triceps"),
         "Incline barbell press" to targets("Chest, front delts", "Triceps"),
         "Incline dumbbell press" to targets("Chest, front delts", "Triceps"),
         "Dumbbell bench press" to targets("Chest, front delts", "Triceps"),
