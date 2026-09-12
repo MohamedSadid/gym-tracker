@@ -37,13 +37,13 @@ Mark a box `[x]` when that item is done.
 
 ### Exercise demos (remaining lifts)
 
-- [ ] Complete lockout / bottom / loop stills for every remaining built-in exercise (`docs/exercise-demo-criteria.md`). Stills stay unpainted.
+- [ ] Two stills per lift (`lockout` + `bottom`) for remaining built-ins (`docs/exercise-demo-criteria.md`). Chest barbell/Smith presses: bar on mid-chest at bottom, elbows ~45°; lockout with straight elbows. No loops until asked. Stills stay unpainted.
 
 ### Animation integration
 
 Integrate exercise characters/loops in the app (built-in lifts only; custom exercises stay without a demo).
 
-**First pass:** **Barbell bench press**, **Dumbbell bench press**, and **Incline dumbbell press** have loops. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
+**First pass:** **Barbell bench press**, **Dumbbell bench press**, **Incline barbell press**, and **Incline dumbbell press** have demos. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
 
 **Customize (exercise picker)**
 

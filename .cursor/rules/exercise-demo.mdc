@@ -9,5 +9,7 @@ When creating or changing exercise how-to stills, loops, or the shared mannequin
 
 - Same character, high camera, zoom crop, and black shorts as that file describes.
 - Stills stay **unpainted** gray clay. Do not add lime muscle highlights.
-- Save stills and loops under `content/exercises/` in this repo (see `content/exercises/README.md`). Copy loops into `app/src/main/assets/exercises/` when they should ship with the app.
+- **Two stills only** (`lockout` + `bottom`) until we ask for a loop. Do not generate or copy `loop.png` unless asked.
+- Chest **barbell / Smith presses** (flat and incline): **bottom** = bar on the mid-chest line, elbows ~45° from the torso; **lockout** = elbows fully straight, no bend.
+- Save stills under `content/exercises/` in this repo (see `content/exercises/README.md`). Copy into `app/src/main/assets/exercises/` when they should ship with the app.
 - Do not invent a new look, camera, or file layout that contradicts the criteria.

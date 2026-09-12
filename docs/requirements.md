@@ -18,7 +18,7 @@ v1 is done when you can use it for a real session without an account or internet
 - Search / filter by that same list (not Push / Pull / Core).
 - Add a custom exercise (name + primary muscle).
 - Built-in exercises are not deleted in v1.
-- **Demos (first pass):** **Barbell bench press**, **Dumbbell bench press**, and **Incline dumbbell press** have a two-frame loop. Other built-ins show the same cards with an empty thumbnail until stills exist. Custom exercises have no demo.
+- **Demos (first pass):** **Barbell bench press**, **Dumbbell bench press**, **Incline barbell press**, and **Incline dumbbell press** have lockout/bottom stills (two-frame playback). Other built-ins show the same cards with an empty thumbnail until stills exist. Custom exercises have no demo.
 - Opened demo: large loop (or empty placeholder), then **Main** and **Auxiliary** muscles, then how-to tips. Built-ins have a main/auxiliary list; custom uses the chosen primary muscle only.
 - Picker: thumbnail; tap row opens demo; checkbox + **Add selected** (or **Add** on the demo). Program / opened-day lists: thumbnail; tap opens demo; no checkboxes.
 

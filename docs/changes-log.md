@@ -10,6 +10,10 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Incline barbell press: new built-in + lockout/bottom stills (bar on chest, elbows ~45° / lockout straight). No loop. `ExerciseSeed`, `ExerciseDemos`, `content/exercises/incline-barbell-press/`.
+
+- [x] Exercise demo criteria: chest barbell/Smith presses (flat + incline) use stretch (bar on mid-chest, elbows ~45°) and lockout (elbows fully straight). Two stills only for now; no loop until asked. `docs/exercise-demo-criteria.md`.
+
 - [x] Demo stills unpainted (no lime muscle paint) on Barbell bench press, Dumbbell bench press, and Incline dumbbell press. Painting dropped from `docs/exercise-demo-criteria.md`.
 
 - [x] Barbell bench press demo: C1 C2 D1 primary lime, B5 pale auxiliary; stills + loop in `content/exercises/barbell-bench-press/` and `ExerciseDemos`.

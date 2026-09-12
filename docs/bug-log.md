@@ -10,6 +10,12 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Fixed
 
+- [x] Incline barbell press bottom: bar was too high. Now on the mid-chest line, touching the pecs. Same incline bench. `content/exercises/incline-barbell-press/bottom.png`.
+
+- [x] Incline barbell press bottom still was a flat bench. Regenerated on the same incline bench as lockout. `content/exercises/incline-barbell-press/bottom.png`.
+
+- [x] Barbell bench press demo: bottom bar now on mid-chest with elbows ~45°; lockout elbows fully straight. `content/exercises/barbell-bench-press/` lockout.png + bottom.png (loop not regenerated).
+
 - [x] Session back / system back gesture discarded the workout with no prompt. Now asks **Finish** / **Resume**. Finish saves; incomplete sets stay incomplete (0 toward volume). `SessionScreen` BackHandler.
 - [x] Rest timer digits and Pause / +15s / Skip were dark (`labelLarge` is black). Forced light/lime labels. `RestBar`.
 

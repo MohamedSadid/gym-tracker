@@ -12,4 +12,4 @@ All stills, loops, the character reference, and the loop builder live **in this 
 | `content/exercises/{slug}/` | `lockout.png`, `bottom.png`, `loop.png` |
 | `app/src/main/assets/exercises/` | App copies: `{slug}.png` (loop), `{slug}_lockout.png`, `{slug}_bottom.png` |
 
-When generating a new lift: start from `_character/reference.png`, save stills under `content/exercises/{slug}/`, then run `make_exercise_loop.py` into that folder and copy `loop.png` to `app/src/main/assets/exercises/`.
+When generating a new lift: start from `_character/reference.png`, save **`lockout.png` and `bottom.png`** under `content/exercises/{slug}/`. Do **not** run the loop script until asked. When a loop is requested, run `make_exercise_loop.py` into that folder and copy `loop.png` to `app/src/main/assets/exercises/`.

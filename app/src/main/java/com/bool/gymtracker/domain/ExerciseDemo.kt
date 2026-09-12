@@ -26,6 +26,15 @@ object ExerciseDemos {
                 "Press to lockout; do not bang the dumbbells together.",
             ),
         ),
+        "Incline barbell press" to ExerciseDemo(
+            lockoutAsset = "exercises/incline_barbell_press_lockout.png",
+            bottomAsset = "exercises/incline_barbell_press_bottom.png",
+            tips = listOf(
+                "Set a moderate incline. Bar starts over the upper chest.",
+                "Lower the bar to the chest with elbows about 45° from the torso.",
+                "Press to lockout with elbows fully straight; do not bounce the bar.",
+            ),
+        ),
         "Incline dumbbell press" to ExerciseDemo(
             lockoutAsset = "exercises/incline_dumbbell_press_lockout.png",
             bottomAsset = "exercises/incline_dumbbell_press_bottom.png",

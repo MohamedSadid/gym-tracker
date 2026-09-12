@@ -7,6 +7,7 @@ import com.bool.gymtracker.domain.MuscleGroup
 object ExerciseSeed {
     fun builtIn(): List<ExerciseEntity> = listOf(
         lift("Barbell bench press", MuscleGroup.CHEST),
+        lift("Incline barbell press", MuscleGroup.CHEST),
         lift("Incline dumbbell press", MuscleGroup.CHEST),
         lift("Dumbbell bench press", MuscleGroup.CHEST),
         lift("Chest press machine", MuscleGroup.CHEST),
