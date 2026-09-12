@@ -5,7 +5,7 @@ All stills, loops, the character reference, and the loop builder live **in this 
 | Path | What |
 |------|------|
 | `docs/exercise-demo-criteria.md` | Look, camera, poses, reject list |
-| `docs/exercise-muscle-map.md` | Body-part IDs (C1, D1, D3, B5, …) for highlights |
+| `docs/exercise-muscle-map.md` | Parked body-part IDs (not painted on stills) |
 | `tools/make_exercise_loop.py` | Align two stills → animated PNG |
 | `content/exercises/_character/reference.png` | Master mannequin (use this as the look for every new lift) |
 | `content/exercises/_character/muscle-map.jpg` | Labeled front/back muscle chart |

@@ -1,10 +1,8 @@
 # Exercise muscle region map
 
-Use this atlas when painting how-to stills. Visual source: `content/exercises/_character/muscle-map.jpg`.
+Use this atlas for muscle IDs (C1, D1, B5, …). Visual source: `content/exercises/_character/muscle-map.jpg`.
 
-Chart colors are **labels only**. On lift stills, paint primary `#B8F000` (~90%) and auxiliary `#D4E88A` (~40%). Stay inside the region for that ID. Do not flood neighboring IDs.
-
-When a highlight request names IDs, paint **only those IDs**.
+Lift stills and loops are **unpainted** for now. Do not paint lime on lockout, bottom, or loop frames. Demo **Main** / **Auxiliary** text still comes from `ExerciseTargetMuscles`.
 
 ## Letter prefixes
 
@@ -84,4 +82,4 @@ Hands and feet stay gray clay unless an ID is named.
 
 ## How to ask for a highlight
 
-Name the IDs and the role, e.g. primary `C1 C2 D1`, auxiliary `B5`. Paint only those regions on the lift stills. Leave every other ID gray.
+Leave stills unpainted until painting is turned back on. Name IDs only for the demo-card labels if needed.

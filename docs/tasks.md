@@ -37,13 +37,13 @@ Mark a box `[x]` when that item is done.
 
 ### Exercise demos (remaining lifts)
 
-- [ ] Complete lockout / bottom / loop stills with primary/auxiliary color coding for every remaining built-in exercise (`docs/exercise-demo-criteria.md`)
+- [ ] Complete lockout / bottom / loop stills for every remaining built-in exercise (`docs/exercise-demo-criteria.md`). Stills stay unpainted.
 
 ### Animation integration
 
 Integrate exercise characters/loops in the app (built-in lifts only; custom exercises stay without a demo).
 
-**First pass:** only **Dumbbell bench press** and **Incline dumbbell press** have loops. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
+**First pass:** **Barbell bench press**, **Dumbbell bench press**, and **Incline dumbbell press** have loops. Other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
 
 **Customize (exercise picker)**
 

@@ -8,6 +8,15 @@ data class ExerciseDemo(
 
 object ExerciseDemos {
     private val byName = mapOf(
+        "Barbell bench press" to ExerciseDemo(
+            lockoutAsset = "exercises/barbell_bench_press_lockout.png",
+            bottomAsset = "exercises/barbell_bench_press_bottom.png",
+            tips = listOf(
+                "Lie on a flat bench, feet on the floor, bar over mid-chest.",
+                "Lower the bar to the chest with wrists stacked over the elbows.",
+                "Press to lockout; do not bounce the bar off the chest.",
+            ),
+        ),
         "Dumbbell bench press" to ExerciseDemo(
             lockoutAsset = "exercises/dumbbell_bench_press_lockout.png",
             bottomAsset = "exercises/dumbbell_bench_press_bottom.png",

@@ -28,30 +28,7 @@ Playback: **lockout ↔ bottom**, looping (~700 ms each). File: `{slug}-loop.png
 
 Holds with no path (plank, carry) stay **one still**. Custom exercises: **no demo**.
 
-## Muscle highlights
-
-Paint on the gray clay. Do not change pose, camera, or shorts. Keep `_character/reference.png` **unpainted**.
-
-Region IDs (C1, D1, D3, B5, …) are in **`docs/exercise-muscle-map.md`**. Chart: `content/exercises/_character/muscle-map.jpg`. When a request names IDs, paint **only those IDs**.
-
-**Color convention**
-
-| Role | Color | Opacity |
-|------|--------|---------|
-| **Primary** (main working muscles) | Solid lime `#B8F000` | **High** — almost opaque (~90%). Must read clearly against gray clay. |
-| **Auxiliary** (helpers) | Same hue, paler `#D4E88A` | **Low** — see-through wash (~40%) so it never matches primary. |
-| Other muscles | Gray clay | None |
-
-Paint **only** the muscles in the table. Abs, obliques, biceps, forearms, hips, and legs stay gray clay. Do not flood the whole arm or whole torso.
-
-**Muscle focus (per lift)**
-
-| Lift | Primary | Auxiliary |
-|------|---------|-----------|
-| Flat dumbbell bench press | Chest, front delts | Triceps |
-| Incline dumbbell press | Chest, front delts | Triceps |
-
-Add a row here when a new lift is painted.
+Stills stay **unpainted** gray clay. Do not add lime (or any) muscle highlights on lockout, bottom, or loop frames. Main / auxiliary names on the demo screen still come from `ExerciseTargetMuscles`, not from paint on the PNG.
 
 ## Reject
 
@@ -59,7 +36,7 @@ Add a row here when a new lift is painted.
 - Zoom or angle jump after align
 - Wrong equipment (e.g. incline bench for flat DB press)
 - One arm lockout while the other is at the chest
-- Primary and auxiliary highlights the same opacity or brightness
+- Lime or other muscle paint on the stills
 
 ## Build the loop
 
@@ -74,10 +51,11 @@ Aligns bottom to lockout, crops, writes a two-frame animated PNG.
 - This playbook
 - `content/exercises/README.md` — where files live
 - `content/exercises/_character/reference.png` — master mannequin for every new lift
-- `docs/exercise-muscle-map.md` — region IDs for painting (D3 = side / lateral delt)
-- `content/exercises/_character/muscle-map.jpg` — labeled front/back chart
-- `content/exercises/dumbbell-bench-press/` — `lockout.png`, `bottom.png`, `loop.png`
-- `content/exercises/incline-dumbbell-press/` — `lockout-plain.png`, `bottom-plain.png`, painted `lockout.png` / `bottom.png`, `loop.png`
-- App copies: `app/src/main/assets/exercises/` — `{slug}.png` (loop), `{slug}_lockout.png`, `{slug}_bottom.png` for Dumbbell bench press and Incline dumbbell press
+- `docs/exercise-muscle-map.md` — parked body-part IDs (not used on stills for now)
+- `content/exercises/_character/muscle-map.jpg` — labeled front/back chart (reference only)
+- `content/exercises/barbell-bench-press/` — unpainted `lockout.png`, `bottom.png`, `loop.png`
+- `content/exercises/dumbbell-bench-press/` — unpainted `lockout.png`, `bottom.png`, `loop.png`
+- `content/exercises/incline-dumbbell-press/` — unpainted `lockout.png`, `bottom.png`, `loop.png`
+- App copies: `app/src/main/assets/exercises/` — `{slug}.png` (loop), `{slug}_lockout.png`, `{slug}_bottom.png` for Barbell bench press, Dumbbell bench press, and Incline dumbbell press
 
 Save new generations under `content/exercises/{slug}/` in this repo. Do not leave the only copy in Cursor’s `assets` folder.

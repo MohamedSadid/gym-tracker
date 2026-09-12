@@ -8,7 +8,11 @@ import org.junit.Test
 
 class ExerciseDemoTest {
     @Test
-    fun mapsTheTwoShippedLifts() {
+    fun mapsTheShippedLifts() {
+        val barbell = ExerciseDemos.forName("Barbell bench press")!!
+        assertEquals("exercises/barbell_bench_press_lockout.png", barbell.lockoutAsset)
+        assertEquals(3, barbell.tips.size)
+
         val bench = ExerciseDemos.forName("Dumbbell bench press")!!
         assertEquals("exercises/dumbbell_bench_press_lockout.png", bench.lockoutAsset)
         assertEquals(3, bench.tips.size)
@@ -20,7 +24,7 @@ class ExerciseDemoTest {
 
     @Test
     fun unknownAndCustomHaveNoDemo() {
-        assertNull(ExerciseDemos.forName("Barbell bench press"))
+        assertNull(ExerciseDemos.forName("Chest fly"))
         assertNull(ExerciseDemos.forName("My custom fly"))
     }
 

@@ -10,6 +10,10 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Demo stills unpainted (no lime muscle paint) on Barbell bench press, Dumbbell bench press, and Incline dumbbell press. Painting dropped from `docs/exercise-demo-criteria.md`.
+
+- [x] Barbell bench press demo: C1 C2 D1 primary lime, B5 pale auxiliary; stills + loop in `content/exercises/barbell-bench-press/` and `ExerciseDemos`.
+
 - [x] Exercise demo: larger full-width PNG; how-to and main/auxiliary muscles under it. `ExerciseDemoScreen`, `ExerciseTargetMuscles`.
 
 - [x] Animation integration: picker/program-day thumbnails; tap opens loop + tips; picker checkbox + Add selected. First pass: Dumbbell bench press and Incline dumbbell press. `ExerciseDemos`, `ExerciseDemoScreen`, `ExercisePickerScreen`, `ProgramDayScreen`.
