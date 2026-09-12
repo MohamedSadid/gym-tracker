@@ -10,6 +10,18 @@ Add a new `- [ ]` item when we find a bug. Change it to `- [x]` after it is fixe
 
 ## Fixed
 
+- [x] Pec deck fly lockout is a copy of the bottom still; only arms/handles change (together in front of the chest, elbows straight). Stack and camera unchanged. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly lockout floor shadow was darker than the bottom still. Matched the even studio lighting. Pose, lifted stack, and guide rods kept. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly lockout was missing the silver guide rods under the lifted stack. Added two chrome rods to the base. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly lockout elbows were bent. Regenerated with elbows fully straight, handles together in front of the chest. Bottom unchanged. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly lockout: duplicated the bottom still; arms together in front of the chest, elbows straight, stack left in place. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly used a pad-style chest machine. Now an overhead-pivot handle pec deck; stack lifted on lockout, down on stretch. Same high camera. `content/exercises/pec-deck-fly/`.
+
 - [x] Incline barbell press bottom: bar was too high. Now on the mid-chest line, touching the pecs. Same incline bench. `content/exercises/incline-barbell-press/bottom.png`.
 
 - [x] Incline barbell press bottom still was a flat bench. Regenerated on the same incline bench as lockout. `content/exercises/incline-barbell-press/bottom.png`.

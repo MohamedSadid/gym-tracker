@@ -62,6 +62,15 @@ object ExerciseDemos {
                 "Press to lockout without flaring the elbows wide.",
             ),
         ),
+        "Pec deck fly" to ExerciseDemo(
+            lockoutAsset = "exercises/pec_deck_fly_lockout.png",
+            bottomAsset = "exercises/pec_deck_fly_bottom.png",
+            tips = listOf(
+                "Sit tall against the pad. Hold the vertical handles, elbows about shoulder height.",
+                "Open until you feel a stretch across mid-chest; keep a slight elbow bend.",
+                "Bring the handles together in front of the chest with elbows straight. Do not slam them.",
+            ),
+        ),
     )
 
     fun forName(name: String): ExerciseDemo? = byName[name]

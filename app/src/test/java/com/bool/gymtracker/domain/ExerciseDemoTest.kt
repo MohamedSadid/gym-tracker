@@ -32,6 +32,10 @@ class ExerciseDemoTest {
         val incline = ExerciseDemos.forName("Incline dumbbell press")!!
         assertEquals("exercises/incline_dumbbell_press_bottom.png", incline.bottomAsset)
         assertEquals(3, incline.tips.size)
+
+        val pecDeck = ExerciseDemos.forName("Pec deck fly")!!
+        assertEquals("exercises/pec_deck_fly_lockout.png", pecDeck.lockoutAsset)
+        assertEquals(3, pecDeck.tips.size)
     }
 
     @Test

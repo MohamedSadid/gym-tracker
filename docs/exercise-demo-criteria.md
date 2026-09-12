@@ -45,13 +45,21 @@ Dumbbell chest presses still use the same two poses (stretch at the chest, locko
 
 **Smith vs free barbell:** a Smith press uses a bar locked to **vertical rails** (sliders, catch hooks). Do not draw a free Olympic barbell on an open bench.
 
+### Pec deck / machine fly
+
+Machine: **overhead-pivot pec deck** — two arms hang from cams at the top of the frame, ending in vertical **handles** (not large forearm pads, not a chest-press machine). Weight stack on the side.
+
+**Lockout** (end of concentric): **copy the bottom still**. Change **only** the arms and handles: bring them **together in front of the chest** with elbows **fully straight** (no bend). On the stack, **4–5 plates** lift to about **shoulder height**; the **remaining plates stay down** on the base. Chrome guide rods stay visible between the lifted plates and the plates left behind. Do not change camera, lighting, shadows, seat, or machine.
+
+**Bottom** (stretch): seated; handles open wide to the sides; slight elbow bend at about shoulder height.
+
 Stills stay **unpainted** gray clay. Do not add lime (or any) muscle highlights on lockout, bottom, or loop frames. Main / auxiliary names on the demo screen still come from `ExerciseTargetMuscles`, not from paint on the PNG.
 
 ## Reject
 
 - Different body, face, or shorts color/cut between frames or lifts
 - Zoom or angle jump after align
-- Wrong equipment (e.g. incline bench for flat DB press, a **flat** bench on an incline press, or a **free barbell** on a Smith press)
+- Wrong equipment (e.g. incline bench for flat DB press, a **flat** bench on an incline press, a **free barbell** on a Smith press, or a **chest-press pad machine** posed as a pec deck)
 - One arm lockout while the other is at the chest
 - Lime or other muscle paint on the stills
 - Chest barbell/Smith **bottom**: bar off the chest, on the neck, or elbows flared ~90°
@@ -80,6 +88,7 @@ Aligns bottom to lockout, crops, writes a two-frame animated PNG.
 - `content/exercises/smith-bench-press/` — unpainted `lockout.png`, `bottom.png` (no loop yet)
 - `content/exercises/incline-smith-bench-press/` — unpainted `lockout.png`, `bottom.png` (no loop yet)
 - `content/exercises/incline-dumbbell-press/` — unpainted `lockout.png`, `bottom.png`, `loop.png`
-- App copies: `app/src/main/assets/exercises/` — `{slug}_lockout.png`, `{slug}_bottom.png` (and `{slug}.png` loop when it exists) for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, and Incline dumbbell press
+- `content/exercises/pec-deck-fly/` — unpainted `lockout.png`, `bottom.png` (no loop yet)
+- App copies: `app/src/main/assets/exercises/` — `{slug}_lockout.png`, `{slug}_bottom.png` (and `{slug}.png` loop when it exists) for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, Incline dumbbell press, and Pec deck fly
 
 Save new generations under `content/exercises/{slug}/` in this repo (`lockout.png` and `bottom.png` only until loops are requested). Do not leave the only copy in Cursor’s `assets` folder.

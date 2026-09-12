@@ -16,6 +16,7 @@ object ExerciseSeed {
         lift("Dips", MuscleGroup.CHEST),
         lift("Push-up", MuscleGroup.CHEST),
         lift("Chest fly", MuscleGroup.CHEST),
+        lift("Pec deck fly", MuscleGroup.CHEST),
         lift("Cable fly", MuscleGroup.CHEST),
         lift("Barbell row", MuscleGroup.BACK),
         lift("Lat pulldown", MuscleGroup.BACK),

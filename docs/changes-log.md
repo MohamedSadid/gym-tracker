@@ -10,6 +10,14 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Pec deck fly lockout: 4–5 plates rise to shoulder height; remaining plates stay on the base. Pose unchanged. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly lockout: stack rises a small amount (short gap under the plates). Pose matches the bottom still. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly lockout: weight stack lifted so the concentric reads as a completed rep. Pose unchanged. `content/exercises/pec-deck-fly/lockout.png`.
+
+- [x] Pec deck fly: new built-in + lockout/bottom stills on a pec-deck machine. Same camera/lighting; stretch pads open, contracted pads together. No loop. `ExerciseSeed`, `ExerciseDemos`, `content/exercises/pec-deck-fly/`.
+
 - [x] Incline Smith bench press: new built-in + lockout/bottom stills (Smith rails, incline bench). Same camera/lighting; bottom bar on mid-chest. No loop. `ExerciseSeed`, `ExerciseDemos`, `content/exercises/incline-smith-bench-press/`.
 
 - [x] Smith bench press: new built-in + lockout/bottom stills on a Smith machine (rails, not a free bar). Same camera/lighting; bottom bar on chest. No loop. `ExerciseSeed`, `ExerciseDemos`, `content/exercises/smith-bench-press/`.
