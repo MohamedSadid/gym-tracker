@@ -89,6 +89,15 @@ object ExerciseDemos {
                 "Press the handles forward against the weight until both elbows are fully straight, then return to the settle position.",
             ),
         ),
+        "Push-up" to ExerciseDemo(
+            position1Asset = "exercises/push_up_position_1.png",
+            position2Asset = "exercises/push_up_position_2.png",
+            tips = listOf(
+                "Hands under the chest, body in a straight line from head to heels.",
+                "Lower until the chest is close to the floor, elbows about 45° from the torso.",
+                "Press until both elbows are fully straight. Do not sag or pike the hips.",
+            ),
+        ),
     )
 
     fun forName(name: String): ExerciseDemo? = byName[name]

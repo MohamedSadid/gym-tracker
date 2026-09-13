@@ -8,7 +8,22 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 - [ ] Short description. Where. What should happen instead.
 -->
 
+
 ## Done
+
+- [x] Push-up two-frame loop from position 1 + position 2. `content/exercises/push-up/loop.png` and `app/src/main/assets/exercises/push_up.png`.
+
+- [x] Push-up position 1: smaller elbow joint angle so the chest drops closer to the floor. Same camera as the approved still. `content/exercises/push-up/position-1.png`.
+
+- [x] Push-up position 1: body follows the red heel-to-hand guide on position 2. Same camera. No red line on the PNG. `content/exercises/push-up/position-1.png`.
+
+- [x] Demo stills: both position 1 and position 2 are 1152×864. Push-up position 1 resized to that canvas with the same zoom as position 2. `docs/exercise-demo-criteria.md`, `content/exercises/push-up/position-1.png`.
+
+- [x] Push-up position 1: duplicate of locked position 2 (same camera/zoom). Chest almost on the floor; upper arms 45° from the torso; elbow joint ~60°. `content/exercises/push-up/position-1.png`.
+
+- [x] Push-up position 1: chest almost touching the floor. Same camera as the previous still. `content/exercises/push-up/position-1.png`.
+
+- [x] Push-up: two unpainted stills (position 1 bottom stretch, position 2 arms straight). Same character/camera. No loop. `content/exercises/push-up/`, `ExerciseDemos`.
 
 - [x] Attach Chest press machine demo to chest days, and replace built-in Chest fly with Pec deck fly. Pro Split — Chest lists Chest press machine + Pec deck fly; Chest fly dropped from the seed. `ExerciseSeed`, `ProgramSeed.syncProSplitChest`.
 

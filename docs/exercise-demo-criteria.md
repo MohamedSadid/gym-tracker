@@ -15,7 +15,8 @@ Do not use a new person per frame. Do not use the block 3D mannequin.
 
 - **High three-quarter from above** (about 30–40°). Chest and both implements visible. Not a low side shot, not straight top-down.
 - Same angle, zoom, lighting, bench, and machine on both frames of a lift.
-- The generator redraws the camera each time. After stills exist, **align and crop** to the position-1 frame (scale + pan). Reject if it still looks like a different shot.
+- Both stills are **1152 × 864** (4:3). Export or crop to that size before saving. Do not leave a square frame on one pose and 4:3 on the other.
+- The generator redraws the camera each time. After stills exist, **align and crop** to the locked frame (usually position 1; for Push-up, position 2). Reject if it still looks like a different shot.
 
 ## How to make the two stills
 
@@ -80,12 +81,23 @@ Machine: **seated lever chest press** — upright 90° seat. Two **horizontal** 
 
 **Position 2:** **copy position 1**. Same camera, zoom, lighting, brightness, and shadows — no darker overlay. The overhead **lever arms rotate up a little** around their pivot until the handles sit about **head height** (the marked end of the axis), not above the head. Elbows **fully extended**. Hands stay on both horizontal handles. Stack rises with the levers. Do not draw guide lines on the PNG.
 
+### Push-up
+
+No equipment. Floor only. Same gray clay mannequin, black shorts, high three-quarter camera.
+
+For this lift the **position 2** still is the locked camera. **Position 1** is a duplicate of that frame with only the arms and body height changed.
+
+**Position 1 (stretch):** copy of position 2. Hands and feet stay planted. The body line (heels → hips → chest) drops along the same diagonal as the locked plank, until the chest is **almost touching the floor**. Upper arms **45° from the torso** (tucked, not flared 90°). Elbow **joint** about **45°** (more bent than a 90° push-up). Hips neither sagging off that line nor piked.
+
+**Position 2 (peak):** high plank, elbows **fully extended** (~180°). Same camera, zoom, lighting, brightness, and shadows — no darker overlay.
+
 Stills stay **unpainted** gray clay. Do not add lime (or any) muscle highlights on position 1, position 2, or loop frames. Main / auxiliary names on the demo screen still come from `ExerciseTargetMuscles`, not from paint on the PNG.
 
 ## Reject
 
 - Different body, face, or shorts color/cut between frames or lifts
 - Zoom or angle jump after align
+- Wrong canvas size (not **1152 × 864**)
 - Position 2 redrawn as a new scene instead of a duplicate of position 1
 - Position 2 darker, more contrasty, or a different shadow pass than position 1
 - Wrong equipment (e.g. incline bench for flat DB press, a **flat** bench on an incline press, a **free barbell** on a Smith press, a **chest-press pad machine** posed as a pec deck, a **pec deck** posed as a cable fly, a **flat bench** on cable fly instead of a 90° upright seat, or a **pec deck / cable fly** posed as a chest press machine)
@@ -94,6 +106,7 @@ Stills stay **unpainted** gray clay. Do not add lime (or any) muscle highlights 
 - Chest barbell/Smith **position 1**: bar off the chest, on the neck, or elbows flared ~90°
 - Chest press **position 2**: any visible elbow bend
 - Cable fly **position 2**: any elbow bend, or D-handles not gripped in the hands (e.g. stuck on the elbows)
+- Push-up **position 2**: any visible elbow bend, knees on the floor, or a pike hip
 
 ## Build the loop (later)
 
@@ -121,6 +134,7 @@ Aligns position 2 to position 1, crops, writes a two-frame animated PNG.
 - `content/exercises/pec-deck-fly/` — unpainted `position-1.png`, `position-2.png`, `loop.png`
 - `content/exercises/cable-fly/` — unpainted `position-1.png`, `position-2.png`, `loop.png`
 - `content/exercises/chest-press-machine/` — unpainted `position-1.png`, `position-2.png`, `loop.png`
-- App copies: `app/src/main/assets/exercises/` — `{slug}_position_1.png`, `{slug}_position_2.png` (and `{slug}.png` loop when it exists) for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, Incline dumbbell press, Pec deck fly, Cable fly, and Chest press machine
+- `content/exercises/push-up/` — unpainted `position-1.png`, `position-2.png`, `loop.png`
+- App copies: `app/src/main/assets/exercises/` — `{slug}_position_1.png`, `{slug}_position_2.png` (and `{slug}.png` loop when it exists) for Barbell bench press, Dumbbell bench press, Smith bench press, Incline barbell press, Incline Smith bench press, Incline dumbbell press, Pec deck fly, Cable fly, Chest press machine, and Push-up
 
 Save new generations under `content/exercises/{slug}/` in this repo (`position-1.png` and `position-2.png` only until loops are requested). Do not leave the only copy in Cursor’s `assets` folder.

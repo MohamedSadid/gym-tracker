@@ -19,6 +19,7 @@ class ExerciseDemoTest {
             "Pec deck fly" to "exercises/pec_deck_fly_position_2.png",
             "Cable fly" to "exercises/cable_fly_position_2.png",
             "Chest press machine" to "exercises/chest_press_machine_position_2.png",
+            "Push-up" to "exercises/push_up_position_2.png",
         )
         names.forEach { (name, position2) ->
             val demo = ExerciseDemos.forName(name)!!

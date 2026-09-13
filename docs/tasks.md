@@ -40,12 +40,12 @@ These are the holes called out before a public launch. Demos alone do not close 
 - [ ] **Rest timer after kill:** countdown lives in the session process. Swiping the app away (or Android killing it) stops the beep; it does not resume the old remaining seconds
 - [ ] **kg / lb toggle:** store users will expect pounds
 - [ ] **Accounts / cloud sync:** optional; not needed for a file backup
-- [ ] **Empty demos:** Back / Shoulders / Arms / Legs / Abs / Other stills + thumbnails (chest is done except Dips and Push-up). Empty cards are OK if they clearly say no demo yet
+- [ ] **Empty demos:** Back / Shoulders / Arms / Legs / Abs / Other stills + thumbnails (chest is done except Dips). Empty cards are OK if they clearly say no demo yet
 - [ ] **App character** for empty states / branding (separate from exercise how-to stills)
 
 ### Exercise demos (remaining lifts)
 
-Two stills per lift (`position-1` + `position-2`); loop when asked. Generate position 1, duplicate, then change only the moving body part. Stills stay unpainted (`docs/exercise-demo-criteria.md`).
+Two stills per lift (`position-1` + `position-2`); loop when asked. Generate position 1, duplicate, then change only the moving body part. Stills stay unpainted and **1152 × 864** (`docs/exercise-demo-criteria.md`).
 
 - [ ] **Chest**
   - [x] Barbell bench press (stills + loop)
@@ -57,7 +57,7 @@ Two stills per lift (`position-1` + `position-2`); loop when asked. Generate pos
   - [x] Pec deck fly (stills + loop)
   - [x] Chest press machine (stills + loop)
   - [ ] Dips
-  - [ ] Push-up
+  - [x] Push-up (stills + loop)
   - [x] Cable fly (stills + loop)
 - [ ] **Back**
 - [ ] **Shoulders**
@@ -70,7 +70,7 @@ Two stills per lift (`position-1` + `position-2`); loop when asked. Generate pos
 
 Integrate exercise characters/loops in the app (built-in lifts only; custom exercises stay without a demo).
 
-- [x] **Chest:** all finished demos in the app (Barbell bench press, Dumbbell bench press, Incline barbell press, Incline dumbbell press, Smith bench press, Incline Smith bench press, Pec deck fly, Cable fly, Chest press machine). Unpainted stills + two-frame playback; picker/program-day thumbnail and demo screen. Loop when asked.
+- [x] **Chest:** all finished demos in the app (Barbell bench press, Dumbbell bench press, Incline barbell press, Incline dumbbell press, Smith bench press, Incline Smith bench press, Pec deck fly, Cable fly, Chest press machine, Push-up). Unpainted stills + two-frame playback; picker/program-day thumbnail and demo screen. Loop when asked.
 
 **Remaining muscles:** other cards get the same chrome and main/auxiliary muscles; thumbnail/animation/how-to stay empty until their demos exist.
 

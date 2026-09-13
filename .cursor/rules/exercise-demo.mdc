@@ -8,6 +8,7 @@ alwaysApply: true
 When creating or changing exercise how-to stills, loops, or the shared mannequin, **read and follow** `docs/exercise-demo-criteria.md` first.
 
 - Same character, high camera, zoom crop, and black shorts as that file describes.
+- Both stills are **1152 × 864** (4:3). Match the locked frame’s zoom; do not leave one pose square.
 - Stills stay **unpainted** gray clay. Do not add lime muscle highlights.
 - **Two stills only** (`position-1` + `position-2`) until we ask for a loop. Do not generate or copy `loop.png` unless asked.
 - Always generate **position 1** first, **duplicate** it as position 2, then change **only** the moving body part (and the implement that follows). Camera, zoom, lighting, brightness, shadows, and unmoving posture stay identical. No darker overlay on position 2.
