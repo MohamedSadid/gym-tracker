@@ -10,6 +10,8 @@ Add a new `- [ ]` item when we agree a product/UI/behavior change (not a bug). C
 
 ## Done
 
+- [x] Attach Chest press machine demo to chest days, and replace built-in Chest fly with Pec deck fly. Pro Split — Chest lists Chest press machine + Pec deck fly; Chest fly dropped from the seed. `ExerciseSeed`, `ProgramSeed.syncProSplitChest`.
+
 - [x] Chest press machine two-frame loop from position 1 + position 2. `content/exercises/chest-press-machine/loop.png` and `app/src/main/assets/exercises/chest_press_machine.png`.
 
 - [x] Chest press machine: position 1 then duplicate for position 2 (90° seat; P2 arms fully straight at chest; same lighting, no darker overlay). `content/exercises/chest-press-machine/`, `ExerciseDemos`. No loop.

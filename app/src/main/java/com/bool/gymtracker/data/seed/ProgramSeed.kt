@@ -158,7 +158,8 @@ object ProgramSeed {
                 listOf(
                     "Barbell bench press",
                     "Incline dumbbell press",
-                    "Chest fly",
+                    "Chest press machine",
+                    "Pec deck fly",
                     "Dips",
                     "Push-up",
                 ),
@@ -233,6 +234,23 @@ object ProgramSeed {
                     )
                 }
             }
+        }
+    }
+
+    suspend fun syncProSplitChest(db: AppDatabase) {
+        val chest = days("pro_split").find { it.name == "Pro Split — Chest" } ?: return
+        val workout = db.workoutDao().forProgram("pro_split").find { it.name == chest.name } ?: return
+        val all = db.exerciseDao().listAll().associate { it.name to it.id }
+        db.workoutExerciseDao().deleteForWorkout(workout.id)
+        chest.exercises.forEachIndexed { position, exerciseName ->
+            val exerciseId = all[exerciseName] ?: return@forEachIndexed
+            db.workoutExerciseDao().insert(
+                WorkoutExerciseEntity(
+                    workoutId = workout.id,
+                    exerciseId = exerciseId,
+                    position = position,
+                ),
+            )
         }
     }
 }

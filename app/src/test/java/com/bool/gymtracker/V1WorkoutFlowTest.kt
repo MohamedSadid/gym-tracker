@@ -177,7 +177,7 @@ class V1WorkoutFlowTest {
 
         workouts.rename(first.id, "Hacked")
         workouts.delete(first.id)
-        val fly = exercises.observeAll().first().first { it.name == "Chest fly" }
+        val fly = exercises.observeAll().first().first { it.name == "Pec deck fly" }
         assertEquals(false, workouts.addExercise(first.id, fly.id))
         assertEquals("Full Body — Day A", workouts.observeDetail(first.id).first()?.name)
         assertEquals(3, workouts.observeProgramDays("full_body").first().size)
@@ -209,8 +209,9 @@ class V1WorkoutFlowTest {
         assertEquals("EXTENSORS", ExerciseSeed.builtIn().first { it.name == "Reverse curl" }.coverageRegion)
         assertEquals("CALVES", ExerciseSeed.builtIn().first { it.name == "Seated calf raise" }.coverageRegion)
         assertTrue(byName.containsKey("Chest press machine"))
+        assertTrue(byName.containsKey("Pec deck fly"))
         assertTrue(byName.containsKey("Hack squat"))
-        assertEquals(67, byName.size)
+        assertEquals(66, byName.size)
         assertTrue(byName.values.none { it in setOf("PUSH", "PULL", "CORE") })
     }
 
@@ -244,7 +245,7 @@ class V1WorkoutFlowTest {
         val workoutId = workouts.create("Push A")
         val all = exercises.observeAll().first()
         val bench = all.first { it.name == "Barbell bench press" }
-        val fly = all.first { it.name == "Chest fly" }
+        val fly = all.first { it.name == "Pec deck fly" }
         val row = all.first { it.name == "Barbell row" }
         workouts.addExercise(workoutId, bench.id)
         workouts.addExercise(workoutId, fly.id)

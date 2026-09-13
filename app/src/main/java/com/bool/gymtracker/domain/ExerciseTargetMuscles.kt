@@ -16,7 +16,6 @@ object ExerciseTargetMuscles {
         "Chest press machine" to targets("Chest", "Front delts, triceps"),
         "Dips" to targets("Chest, triceps", "Front delts"),
         "Push-up" to targets("Chest", "Front delts, triceps"),
-        "Chest fly" to targets("Chest", "Front delts"),
         "Pec deck fly" to targets("Chest", "Front delts"),
         "Cable fly" to targets("Chest", "Front delts"),
         "Barbell row" to targets("Lats, mid-back", "Biceps, rear delts"),

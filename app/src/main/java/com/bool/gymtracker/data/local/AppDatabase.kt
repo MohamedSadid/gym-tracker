@@ -45,6 +45,8 @@ abstract class AppDatabase : RoomDatabase() {
             }
             if (workoutDao().countBuiltIn() == 0) {
                 ProgramSeed.insertBuiltIns(this@AppDatabase)
+            } else {
+                ProgramSeed.syncProSplitChest(this@AppDatabase)
             }
             if (settingsDao().get() == null) {
                 settingsDao().upsert(SettingsEntity())

@@ -14,6 +14,9 @@ Mark a box `[x]` when that item is done.
 - [ ] First git commit of the project (only when you ask — or you do it yourself)
 - [ ] Enhance in-app animation (screen transitions and session UI)
 - [x] Extend the built-in exercise library (more lifts, including forearm extensors and better region coverage)
+- [ ] Log a real week of sessions on a phone (volume + coverage need a finished Mon–Sun week)
+- [ ] After 3 weeks of logging, check Progress flat / rise / fall cards
+- [ ] Soft launch: you + a couple of gym friends, even if non-chest demos are still empty
 
 ### Performance engine (do in order)
 
@@ -28,12 +31,17 @@ Mark a box `[x]` when that item is done.
 
 ## Later (not v1)
 
-- [ ] kg / lb toggle
-- [ ] Edit or delete old sessions
-- [ ] Backup / cloud sync
-- [ ] Accounts
-- [ ] Rest timer still firing if the app is fully killed
-- [ ] App character for empty states / branding (separate from exercise how-to stills)
+### Launch gaps (Play Store / other people)
+
+These are the holes called out before a public launch. Demos alone do not close them.
+
+- [ ] **Wrong set after Finish:** edit or delete a logged set (and/or delete a finished session). History is read-only today; a typo (e.g. 800 kg) stays in volume and Progress
+- [ ] **Backup:** uninstall wipes Room. At least export/import a file; cloud sync is extra
+- [ ] **Rest timer after kill:** countdown lives in the session process. Swiping the app away (or Android killing it) stops the beep; it does not resume the old remaining seconds
+- [ ] **kg / lb toggle:** store users will expect pounds
+- [ ] **Accounts / cloud sync:** optional; not needed for a file backup
+- [ ] **Empty demos:** Back / Shoulders / Arms / Legs / Abs / Other stills + thumbnails (chest is done except Dips and Push-up). Empty cards are OK if they clearly say no demo yet
+- [ ] **App character** for empty states / branding (separate from exercise how-to stills)
 
 ### Exercise demos (remaining lifts)
 
@@ -50,7 +58,6 @@ Two stills per lift (`position-1` + `position-2`); loop when asked. Generate pos
   - [x] Chest press machine (stills + loop)
   - [ ] Dips
   - [ ] Push-up
-  - [ ] Chest fly
   - [x] Cable fly (stills + loop)
 - [ ] **Back**
 - [ ] **Shoulders**
